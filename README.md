@@ -5,7 +5,7 @@
 **Version**: 1.0.0
 
 ## Overview
-This MVC web application does blah, blah, blah!
+This API does blah, blah, blah!
 
 ## Getting Started
 The following is required to run the program.
