@@ -26,7 +26,7 @@ Scope (In/Out)
 - Allow user to create an account (user name only, no password)
 - Allow existing users to log back in
 
-Stretch
+## Stretch
 - Responsive design
 - Allow a user to view other users
 - Pre-generated playlists saved to custom API
@@ -35,13 +35,8 @@ Stretch
 - Allow a user to add new songs to database
 - Allow a user read access to another user's playlist
 
-Functional Requirements
-
-List the functionality of your product. This will consist of tasks such as the following:
-
-    We want to be able to control our database/API query so that we can generate customized playlists.
-    We want to connect with the database so that we can a user name and their playlists.
-    A user can search all of the songs in the database.
+## Functional Requirements
+We want to be able to control our database/API query so that we can generate customized playlists. We want to connect with the database so that we can a user name and their playlists. A user can search all of the songs in the database.
 
 ## Non-Functional Requirements
 
