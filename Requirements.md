@@ -1,5 +1,5 @@
-#Software Requirements
-##Vision
+# Software Requirements
+## Vision
 
 What is the vision of this product?
 
@@ -14,7 +14,7 @@ Scope (In/Out)
         These should be features that you will make very clear from the beginning that you will not do during development.
         HINT: Pick your battles wisely. This should only be 1 or 2 things.
 
-##MVP
+## MVP
 
 What will your MVP be. What is your expected minimum end product?
 Stretch
@@ -28,7 +28,7 @@ List the functionality of your product. This will consist of tasks such as the f
     A user can update their profile information
     A User can search all of the products in the inventory
 
-##Non-Functional Requirements
+## Non-Functional Requirements
 
 Non-functional requirements are requirements that are not directly related to the functionality of the application.
 
