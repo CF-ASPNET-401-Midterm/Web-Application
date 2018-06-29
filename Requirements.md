@@ -1,13 +1,6 @@
 # Software Requirements
 ## Vision
-What is the vision of this product?
-Playlist Mixer provides various music playlists.
-
-What pain point does this project solve?
-We want to provide entertainment for the community. This is a free of charge service.
-
-Why should we care about your product?
-We want to provide the highest quality of playlists based user preferences.
+Playlist Mixer provides various music playlists. We want to provide entertainment for the community. This is a free of charge service. The aim of our application is to provide the highest quality of playlists based user preferences.
 
 Scope (In/Out)
 
