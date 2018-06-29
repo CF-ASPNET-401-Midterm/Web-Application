@@ -7,6 +7,7 @@ What pain point does this project solve?
 We want to provide entertainment for the community. This is a free of charge service.
 
 Why should we care about your product?
+We want to provide the highest quality of playlists based user preferences.
 
 Scope (In/Out)
 
