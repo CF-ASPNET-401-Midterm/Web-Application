@@ -57,6 +57,7 @@ The security of this application will be non-existent. Therefore, users will be 
 This application shall include unit tests with a total code coverage of no less than 90%.
 
 ### Usability
+Any user will have access to our application. Any user should be able to create playlists.
 
 Examples include:
 
