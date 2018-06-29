@@ -10,21 +10,20 @@ Why should we care about your product?
 
 Scope (In/Out)
 
-    IN - What will your product do
+        IN
         Provide playlists of songs
         Display list of songs in the selected playlist
         Allow users to search by genre and time period
         
         
-    OUT - What will your product not do.
+        OUT
         Does not play music directly
 
 ## MVP
-What will your MVP be. What is your expected minimum end product?
-The web application should be able to display a playlist based off of user searches by genre and/or time period.
-Songs will have title, artist, album, and time period
-Allow user to create an account (user name only, no password)
-Allow existing users to log back in
+- display a playlist based off of user searches by genre and/or time period
+- songs with title, artist, album, and time period displayed
+- Allow user to create an account (user name only, no password)
+- Allow existing users to log back in
 
 Stretch
 - Responsive design
@@ -39,13 +38,11 @@ Functional Requirements
 
 List the functionality of your product. This will consist of tasks such as the following:
 
-    An Admin can create and delete user accounts
-    A user can update their profile information
-    A User can search all of the songs in the database
+    We want to be able to control our database/API query so that we can generate customized playlists.
+    We want to connect with the database so that we can a user name and their playlists.
+    A user can search all of the songs in the database.
 
 ## Non-Functional Requirements
-
-Non-functional requirements are requirements that are not directly related to the functionality of the application.
 
 ### Availability
 This web application will be hosted on Azure Web Services.
@@ -59,14 +56,7 @@ This application shall include unit tests with a total code coverage of no less 
 ### Usability
 Any user will have access to our application. Any user should be able to create playlists.
 
-Examples include:
+Since our application will be hosted on Azure Web Services, the availability of our application will dependent on the stability of Azure's servers. Because users will have access to our application without a password, testing for security will not be necessary.
 
-    Security - none
-    Usability
-    Testability
-    etc….
-
-Pick 2 Non-functional requirements and describe it’s functionality in your application
-Data Flow
-
-Describe the flow of data in your application. This should descibe what happens from the time the user hits the site, to the time the request process completes.
+### Flow of Data
+When a user logs in (without password), the user will be saved onto the database (if it doesn't already exist). When a user sends a request, a query is sent to our API that has pre-built playlists retrieved from a third party API. Matching playlists are then sent from our API back to the user on the web application.
