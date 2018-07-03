@@ -1,9 +1,9 @@
 ﻿@model User
 
 
-@{ 
-    var user = ViewData["user"];
-}
+@*@{ 
+    var playlists = ViewData["user"];
+}*@
 
 <html>
 <head>
@@ -33,9 +33,25 @@
                     <label asp-for="DatListEyeDee" class="control-label">
                         <a value="1"> rock </a>
                     </label>
+                    <span asp-validation-for="DatListEyeDee" class="text-danger"></span>
                 </div>
 
             </form>
+                @foreach (var list in ViewData["Playlists"] as IList<Playlist>)
+                {
+            <form asp-action="NewUser">
+                @*<div class="form-group">
+                    <label asp-for="DatListEyeDee" class="control-label">
+                        <a value="@list.Id">@list.Name </a>
+                    </label>
+                    <span asp-validation-for="DatListEyeDee" class="text-danger"></span>
+                </div>*@
+                <div class="form-group">
+                    <input type="submit" value="@list.Name" class="btn btn-default" />
+                </div>
+            </form>
+
+                }
         </div>
     </main>
 </body>

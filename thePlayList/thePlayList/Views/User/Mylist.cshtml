@@ -27,15 +27,17 @@
         </nav>
     </header>
     <main>
-        <h2> Test for connection </h2>
+        <h2> My Playlist </h2>
         <table>
-            @foreach (var list in Model.Playlists)
+
+            @foreach(var song in Model.Songs)
             {
                 <tr>
-                    <td> @list.Id</td>
-                    <td> @list.Name </td>
-                    <td> @list.Songs</td>
+                    <td>@song.Name</td>
+                    <td>@song.Artist</td>
+                    <td>@song.Album</td>
                 </tr>
+
             }
 </table>
     </main>

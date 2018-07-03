@@ -14,5 +14,26 @@ namespace thePlayList.Models
         public string Name { get; set; }
 
         public int DatListEyeDee { get; set; }
+
+        public int DatGenreEyeDee { get; set; }
+
+        //public ListEnum DatGenre { get; set; }
     }
+
+    //public enum ListEnum
+    //{
+    //    Blues = 2,
+    //    Comedy = 3,
+    //    [Display(Name = "Children's Music")] ChildMusic = 4,
+    //    Country = 6,
+    //    Holiday = 8,
+    //    Opera = 9,
+    //    [Display(Name = "Singer/Songwriter")] SingerSongwriter = 10,
+    //    Soundtrack= 16,
+    //    [Display(Name= "Hip Hop/Rap")] HipHopRap = 18,
+    //    Alternative= 20,
+    //    Christian & Gospel= 22,
+    //    Easy Listening= 25
+    //    Instrumental= 53
+    //}
 }

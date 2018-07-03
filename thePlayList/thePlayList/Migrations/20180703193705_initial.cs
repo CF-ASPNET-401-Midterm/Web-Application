@@ -14,7 +14,8 @@ namespace thePlayList.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    GenreID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,8 +28,9 @@ namespace thePlayList.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    DatListEyeDee = table.Column<int>(nullable: false)
+                    Name = table.Column<string>(nullable: false),
+                    DatListEyeDee = table.Column<int>(nullable: false),
+                    DatGenreEyeDee = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -39,29 +41,30 @@ namespace thePlayList.Migrations
                 name: "Song",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
                     Artist = table.Column<string>(nullable: true),
-                    Title = table.Column<string>(nullable: true),
                     Album = table.Column<string>(nullable: true),
-                    ReleaseDate = table.Column<DateTime>(nullable: false),
-                    PlaylistId = table.Column<int>(nullable: true)
+                    Genre = table.Column<string>(nullable: true),
+                    PlaylistID = table.Column<int>(nullable: false),
+                    ReleaseDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Song", x => x.Id);
+                    table.PrimaryKey("PK_Song", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Song_Playlists_PlaylistId",
-                        column: x => x.PlaylistId,
+                        name: "FK_Song_Playlists_PlaylistID",
+                        column: x => x.PlaylistID,
                         principalTable: "Playlists",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Song_PlaylistId",
+                name: "IX_Song_PlaylistID",
                 table: "Song",
-                column: "PlaylistId");
+                column: "PlaylistID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

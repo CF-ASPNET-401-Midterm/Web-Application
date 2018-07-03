@@ -10,14 +10,14 @@ using thePlayList.Data;
 namespace thePlayList.Migrations
 {
     [DbContext(typeof(MusicDbContext))]
-    [Migration("20180703001231_toAzure")]
-    partial class toAzure
+    [Migration("20180703193705_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
+                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -26,6 +26,8 @@ namespace thePlayList.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("GenreID");
 
                     b.Property<string>("Name");
 
@@ -36,7 +38,7 @@ namespace thePlayList.Migrations
 
             modelBuilder.Entity("thePlayList.Models.Song", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -44,15 +46,17 @@ namespace thePlayList.Migrations
 
                     b.Property<string>("Artist");
 
-                    b.Property<int?>("PlaylistId");
+                    b.Property<string>("Genre");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("PlaylistID");
 
                     b.Property<DateTime>("ReleaseDate");
 
-                    b.Property<string>("Title");
+                    b.HasKey("ID");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlaylistId");
+                    b.HasIndex("PlaylistID");
 
                     b.ToTable("Song");
                 });
@@ -63,9 +67,12 @@ namespace thePlayList.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("DatGenreEyeDee");
+
                     b.Property<int>("DatListEyeDee");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -76,7 +83,8 @@ namespace thePlayList.Migrations
                 {
                     b.HasOne("thePlayList.Models.Playlist")
                         .WithMany("Songs")
-                        .HasForeignKey("PlaylistId");
+                        .HasForeignKey("PlaylistID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
