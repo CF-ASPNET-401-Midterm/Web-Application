@@ -52,8 +52,7 @@ namespace thePlayList.Controllers
 
             if(user.DatListEyeDee == 0)
             {
-                return RedirectToAction("MyList", new { id = user.Id });
-                //return RedirectToAction("NewUser", new { id = user.Id });
+                return RedirectToAction("NewUser", new { id = user.Id });
             }
             
 
@@ -93,8 +92,9 @@ namespace thePlayList.Controllers
 
         
         [HttpPost]
-        public async Task<IActionResult> NewUser([Bind("Id", "Name", "DatListEyeDee, DatGenreEyeDee")] User user)
+        public async Task<IActionResult> NewUser(User user)
         {
+
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");

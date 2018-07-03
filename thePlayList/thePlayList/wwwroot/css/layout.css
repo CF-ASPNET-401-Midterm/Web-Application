@@ -1,23 +1,25 @@
 ﻿
-body main {
+/*body main {
     padding: 0;
     width: 100%;
-}
+}*/
 
 /*nav bar*/
 nav {
+    padding:0;
     width: 100%;
     background-color: black;
-    line-height: 6em;
+    line-height: 3em;
     opacity: 0.9;
     position: fixed;
     font-family: 'Markazi Text', serif;
 }
 
 nav a {
-    margin-right: 10%;
+    margin: 0 5%;
     color: snow;
     font-size: 2em;
+    display:inline-block;
 }
 
 /*main {

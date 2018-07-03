@@ -8,6 +8,8 @@
 
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="~/css/normalize.css" type="text/css" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
           rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
           crossorigin="anonymous">
@@ -18,19 +20,34 @@
 
 <body>
     <header>
-        <nav>
+        <nav class='navbar navbar-fixed-top'>
             <div>
                 <a asp-action="Mylist" asp-controller="User"> HOME </a>
                 <a asp-action="API" asp-controller="API"> API </a>
                 <a asp-action="About Us" asp-controller="About Us"> About Us </a>
+                <a asp-action="Home" asp-controller=""> Log Out </a>
             </div>
         </nav>
     </header>
     <main>
-        <h2> My Playlist </h2>
-        <table>
-
-            @foreach(var song in Model.Songs)
+        <div class="label">
+            <h2> My Playlist </h2>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Songs[0].Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Songs[0].Artist)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Songs[0].Album)
+                    </th>
+                </tr>
+            </thead>
+            @foreach (var song in Model.Songs)
             {
                 <tr>
                     <td>@song.Name</td>
@@ -39,7 +56,7 @@
                 </tr>
 
             }
-</table>
+        </table>
     </main>
 
 </body>

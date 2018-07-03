@@ -21,6 +21,7 @@
             <a asp-action="HOME" asp-controller="HOME" class="nav-link active"> HOME </a>
             <a asp-action="API" asp-controller="API" class="nav-link"> API </a>
             <a asp-action="About Us" asp-controller="About Us" class="nav-link"> About Us </a>
+            <a asp-action="Home" asp-controller=""> Log Out </a>
         </nav>
     </header>
 
@@ -28,30 +29,20 @@
         <h3> Welcome select your new playlist! </h3>
         <div>
             <img class="genre-img" />
-            <form asp-action="NewUser">
-                <div class="form-group">
-                    <label asp-for="DatListEyeDee" class="control-label">
-                        <a value="1"> rock </a>
-                    </label>
-                    <span asp-validation-for="DatListEyeDee" class="text-danger"></span>
-                </div>
+            @foreach (var list in ViewData["Playlists"] as IList<Playlist>)
+            {
+                <form asp-action="NewUser">
+                    <div class="form-group">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Name" />
+                        <input asp-for="DatGenreEyeDee" class="form-control hide" value="@list.GenreID" />
+                        <input type="submit" value="@list.Name" class="btn btn-default" />
+                    </div>
+                </form>
 
-            </form>
-                @foreach (var list in ViewData["Playlists"] as IList<Playlist>)
-                {
-            <form asp-action="NewUser">
-                @*<div class="form-group">
-                    <label asp-for="DatListEyeDee" class="control-label">
-                        <a value="@list.Id">@list.Name </a>
-                    </label>
-                    <span asp-validation-for="DatListEyeDee" class="text-danger"></span>
-                </div>*@
-                <div class="form-group">
-                    <input type="submit" value="@list.Name" class="btn btn-default" />
-                </div>
-            </form>
-
-                }
+            }
         </div>
     </main>
 </body>

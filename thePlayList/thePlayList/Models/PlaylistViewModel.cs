@@ -10,6 +10,6 @@ namespace thePlayList.Models
     {
         public List<Playlist> Playlists { get; set; }
 
-        public IEnumerable<Song> Songs { get; set; }
+        public List<Song> Songs { get; set; }
     }
 }
