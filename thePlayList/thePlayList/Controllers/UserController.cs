@@ -56,7 +56,7 @@ namespace thePlayList.Controllers
             }
             
 
-            return RedirectToAction("MyList", new { id = user.Id });
+            return RedirectToAction("MyList", "Playlist", new { id = user.Id });
         }
 
         /// <summary>
@@ -89,8 +89,6 @@ namespace thePlayList.Controllers
             return RedirectToAction("Home");
         }
 
-
-        
         [HttpPost]
         public async Task<IActionResult> NewUser(User user)
         {
@@ -115,69 +113,11 @@ namespace thePlayList.Controllers
 
                     _context.Users.Update(user);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("MyList", new { id = user.Id });
+                    return RedirectToAction("MyList", "Playlist", new { id = user.Id });
                 }
                 return NotFound();
             }
         }
-        
-
-        /// <summary>
-        /// Main page displaying the playlist
-        /// </summary>
-        /// <param name="user"> loaded user object if already exist </param>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<IActionResult> MyList(int id)
-        {
-            //if(user.PlaylistId == 0)
-            //{
-            //    return View();
-            //}
-
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");
-
-                //var plResponse = client.GetAsync("/api/playlist").Result;
-                var songResponse = client.GetAsync($"/api/playlist/{user.DatListEyeDee}").Result;
-
-                if (songResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
-                {
-                    //var jsonDataPl = await plResponse.Content.ReadAsStringAsync();
-                    var jsonDataSong = await songResponse.Content.ReadAsStringAsync();
-
-                    //List<Playlist> rawAllPlaylists= JsonConvert.DeserializeObject<List<Playlist>>(jsonDataPl);
-                    SongRoot rawAllSongs = JsonConvert.DeserializeObject<SongRoot>(jsonDataSong);
-
-                    //var allPlaylists = from a in rawAllPlaylists
-                                       //select a;
-
-                    var allSongs = from s in rawAllSongs.Songs
-                                   select s;
-
-                    PlaylistViewModel mylistVM = new PlaylistViewModel();
-                    mylistVM.Songs = allSongs.ToList();
-                    //mylistVM.Playlists = allPlaylists.Where( pl => pl.GenreID == user.DatGenreEyeDee).ToList();
-
-                    return View(mylistVM);
-                }
-                return NotFound();
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ChoosePlaylist(int id)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            return View(user);
-        }
-    
-        //[HttpPost]
-        //public async Task<IActionResult> ChoosePlaylist([Bind("Id", "Name", "DatListEyeDee")] User user)
-        //{
-
-        //}
+       
     }
 }
