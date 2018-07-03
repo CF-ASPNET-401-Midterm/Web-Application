@@ -1,0 +1,21 @@
+﻿@model PlaylistViewModel
+
+
+
+
+
+
+
+
+
+<h2> Test for connection </h2>
+<table>
+@foreach(var list in Model.Playlists)
+{
+    <tr>
+    <td> @list.Id</td>
+    <td> @list.Name </td>
+    <td> @list.Songs</td>
+    </tr>
+}
+</table>

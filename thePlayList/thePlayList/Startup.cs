@@ -19,7 +19,7 @@ namespace thePlayList
 
         public Startup(IConfiguration configuraton)
         {
-            Configuration = Configuration;
+            Configuration = configuraton;
         }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -28,7 +28,8 @@ namespace thePlayList
             services.AddMvc();
 
             services.AddDbContext<MusicDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(Configuration.GetConnectionString("AzureDeployment")));
+            //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,9 +44,10 @@ namespace thePlayList
            {
                routes.MapRoute(
                    name: "default",
-                   template: "{controller=Home}/{action=Index}/{id?}");
+                   template: "{controller=User}/{action=Home}/{id?}");
            });
 
+            app.UseStaticFiles();
 
             app.Run(async (context) =>
             {
