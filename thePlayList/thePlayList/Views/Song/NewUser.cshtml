@@ -2,7 +2,6 @@
 
 
 
-
 <html>
 <head>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
@@ -23,17 +22,18 @@
     </header>
 
     <main>
-        <h2> Login or Create a new username </h2>
-        <div class="form-group">
+        <h3> Welcome select your new playlist! </h3>
+        <div>
+            <form asp-action="NewUser">
+                <div class="form-group">
+                    <label asp-for="DatListEyeDee" class="control-label">
+                        <a value="1"> rock </a>
+                    </label>
+                </div>
 
-            <form asp-controller="User" asp-action="Home">
-            <input type="text" name="username">
-            <input type="submit" value="Create/Login" />
             </form>
-
         </div>
     </main>
-
 </body>
 
 <footer></footer>

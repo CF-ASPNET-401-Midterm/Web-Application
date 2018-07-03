@@ -10,7 +10,7 @@ using thePlayList.Data;
 namespace thePlayList.Migrations
 {
     [DbContext(typeof(MusicDbContext))]
-    [Migration("20180702212221_initial")]
+    [Migration("20180702221039_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,9 +63,9 @@ namespace thePlayList.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name");
+                    b.Property<int>("DatListEyeDee");
 
-                    b.Property<int>("PlaylistId");
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 

@@ -13,7 +13,7 @@ namespace thePlayList.Controllers
 {
     public class UserController : Controller
     {
-        
+
         private MusicDbContext _context { get; set; }
 
         public UserController(MusicDbContext context)
@@ -41,18 +41,46 @@ namespace thePlayList.Controllers
         {
             var user = await _context.Users.FirstOrDefaultAsync(n => n.Name == username);
 
-            if ( user == null)
+            if (user == null)
             {
                 User newuser = new User();
                 newuser.Name = username;
                 await _context.Users.AddAsync(newuser);
                 await _context.SaveChangesAsync();
-                return View(newuser);
+                return RedirectToAction("NewUser", new { id = newuser.Id });
             }
+
+            if(user.DatListEyeDee == 0)
+            {
+                return RedirectToAction("NewUser", new { id = user.Id });
+            }
+            
+
+            return RedirectToAction("MyList");
+        }
+
+        /// <summary>
+        /// Method where new user will select their playlist
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> NewUser(int id)
+        { 
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
             return View(user);
         }
 
+
+        
+        [HttpPost]
+        public async Task<IActionResult> NewUser([Bind("Id", "Name", "DatListEyeDee")] User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("MyList");
+        }
+        
 
         /// <summary>
         /// Main page displaying the playlist
@@ -62,10 +90,10 @@ namespace thePlayList.Controllers
         [HttpGet]
         public async Task<IActionResult> MyList(User user)
         {
-            if(user.PlaylistId == null)
-            {
-                return View();
-            }
+            //if(user.PlaylistId == 0)
+            //{
+            //    return View();
+            //}
 
             using (var client = new HttpClient())
             {

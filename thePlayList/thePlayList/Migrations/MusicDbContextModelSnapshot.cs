@@ -61,9 +61,9 @@ namespace thePlayList.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name");
+                    b.Property<int>("DatListEyeDee");
 
-                    b.Property<int>("PlaylistId");
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 

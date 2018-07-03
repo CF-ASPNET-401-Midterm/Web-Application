@@ -1,7 +1,9 @@
-﻿
+﻿@model User
 
 
-
+@{ 
+    var user = ViewData["user"];
+}
 
 
 <html>
@@ -22,6 +24,20 @@
             </div>
         </nav>
     </header>
+
+    <main>
+        <h3> Welcome select your new playlist! </h3>
+        <div>
+            <form asp-action="NewUser">
+                <div class="form-group">
+                    <label asp-for="DatListEyeDee" class="control-label">
+                        <a value="1"> rock </a>
+                    </label>
+                </div>
+                
+            </form>
+        </div>
+    </main>
 </body>
 
 <footer></footer>

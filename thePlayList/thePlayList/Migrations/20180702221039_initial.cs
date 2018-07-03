@@ -28,7 +28,7 @@ namespace thePlayList.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
-                    PlaylistId = table.Column<int>(nullable: false)
+                    DatListEyeDee = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
