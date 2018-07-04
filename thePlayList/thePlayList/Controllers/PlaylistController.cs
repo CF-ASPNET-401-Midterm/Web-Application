@@ -20,7 +20,7 @@ namespace thePlayList.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Home(string searchString)
+        public async Task<IActionResult> Home(string searchString, User user)
         {
             using (var client = new HttpClient())
             {
@@ -41,12 +41,21 @@ namespace thePlayList.Controllers
                     var allPlaylists = from l in rawPlaylists
                                     select l;
 
+                    List<Song> rawSongs = new List<Song>();
                     foreach(var item in allPlaylists)
                     {
                         var songResponse = client.GetAsync($"/api/playlist/{item.Id}").Result;
                         var stringItemsResult = await songResponse.Content.ReadAsStringAsync();
-                        List<Song> rawSongs = JsonConvert.DeserializeObject<List<Song>>(stringItemsResult);
-                        item.Songs = rawSongs;
+                        Playlist tempList = JsonConvert.DeserializeObject<Playlist>(stringItemsResult);
+
+                        //var varList = from x in tempList
+                        //              select x;
+                        //var tempSongs = from s in tempList.Songs
+                        //               where s.PlaylistID == item.Id
+                        //               select s;
+
+                        //rawSongs.AddRange(tempSongs);
+                        //item.Songs = rawSongs;
                     }
                     //var allSongs = from i in rawSongs
                     //                select i;
@@ -56,10 +65,12 @@ namespace thePlayList.Controllers
                         allPlaylists = rawPlaylists.Where(s => s.Name.Contains(searchString));
                     }
 
-                    //var playlistVM = new PlaylistViewModel();
-                    //playlistVM.Playlists = allPlaylists.ToList();
-                    //playlistVM.Songs = allSongs.ToList();
-                    //return View(playlistVM);
+                    var playlistVM = new PlaylistViewModel();
+                    playlistVM.Playlists = allPlaylists.ToList();
+                    playlistVM.Songs = rawSongs.ToList();
+
+                    ViewData["user"] = user;
+                    return View(playlistVM);
                 }
                 return View();
             }
@@ -104,6 +115,7 @@ namespace thePlayList.Controllers
                     mylistVM.Songs = allSongs.ToList();
                     //mylistVM.Playlists = allPlaylists.Where( pl => pl.GenreID == user.DatGenreEyeDee).ToList();
 
+                    ViewData["user"] = user;
                     return View(mylistVM);
                 }
                 return NotFound();

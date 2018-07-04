@@ -12,7 +12,7 @@ namespace thePlayList.Models
         public string Artist { get; set; }
         public string Album { get; set; }
         public string Genre { get; set; }
-        public int PlaylistID { get; set; }
+        //public int PlaylistID { get; set; }
         public DateTime ReleaseDate { get; set; }
     }
 }

@@ -50,7 +50,9 @@ namespace thePlayList.Controllers
                 return RedirectToAction("NewUser", new { id = newuser.Id });
             }
 
-            if(user.DatListEyeDee == 0)
+            ViewData["user"] = user;
+
+            if (user.DatListEyeDee == 0)
             {
                 return RedirectToAction("NewUser", new { id = user.Id });
             }
@@ -82,8 +84,12 @@ namespace thePlayList.Controllers
                     var allPlaylists = from a in rawAllPlaylists
                                        select a;
 
-                    ViewData["Playlists"] = rawAllPlaylists;
-                    return View(user);
+                    //ViewData["Playlists"] = rawAllPlaylists;
+                    UserVM datUserVM = new UserVM();
+                    datUserVM.User = user;
+                    datUserVM.Playlists = rawAllPlaylists;
+
+                    return View(datUserVM);
                 }
             }
             return RedirectToAction("Home");
@@ -108,11 +114,17 @@ namespace thePlayList.Controllers
                     var allPlaylists = from a in rawAllPlaylists
                                        select a;
 
-                    PlaylistViewModel mylistVM = new PlaylistViewModel();
-                    user.DatListEyeDee = allPlaylists.FirstOrDefault(pl => pl.GenreID == user.DatGenreEyeDee).Id;
+                    //PlaylistViewModel mylistVM = new PlaylistViewModel();
+                    //user.DatListEyeDee = allPlaylists.FirstOrDefault(pl => pl.GenreID == user.DatGenreEyeDee).Id;
 
+                    UserVM datUserVM = new UserVM();
+                    datUserVM.User = user;
+                    datUserVM.User.DatListEyeDee = allPlaylists.FirstOrDefault(pl => pl.GenreID == user.DatGenreEyeDee).Id;
                     _context.Users.Update(user);
                     await _context.SaveChangesAsync();
+
+                    //ViewData["user"] = user;
+
                     return RedirectToAction("MyList", "Playlist", new { id = user.Id });
                 }
                 return NotFound();

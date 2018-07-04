@@ -1,4 +1,4 @@
-﻿@model User
+﻿@model UserVM
 
 
 
@@ -17,37 +17,31 @@
 
 <body>
     <header>
-        <div class="container">
-            <nav class="nav justify-content-center navbar fixed-top bg-dark text-white">
-                <a class="nav-link active" asp-action="HOME" asp-controller="HOME"> HOME </a>
-                <a class="nav-link" asp-action="API" asp-controller="API"> API </a>
-                <a class="nav-link" asp-action="About Us" asp-controller="About Us"> About Us </a>
-                <a asp-action="Home" asp-controller=""> Log Out </a>
-            </nav>
-        </div>
+        <nav class='navbar navbar-fixed-top'>
+            <div>
+                <a asp-action="About Us" asp-controller=""> About Us </a>
+            </div>
+        </nav>
     </header>
     <main>
-        @*<div class="container">*@
-            <div class="card">
-                <img class="card-img" src="~/images/headphone.jpg" alt="Headphone" />
-                <div class="card-img-overlay">
-                    <h4 class="card-text"> Music </h4>
-                    <p class="card-text"> We have millions of songs to choose from.</p>
-                    <h4 class="card-text"> Playlists </h4>
-                    <p class="card-text"> Create your playlists that matches your taste. </p>
-                    <h4 class="card-text"> Access it any time </h4>
-                    <p class="card-text"> View your playlist from home, work, and anywhere at any time.</p>
-                </div>
-                <div class="card-img-overlay login-div">
-                    <form class="card-form" asp-controller="User" asp-action="Home">
-                        <h4 class="card-text"> Login or Create Username </h4>
-                        <input type="text" name="username">
-                        <button type="submit" class="btn btn-outline-primary text-dark">Create / Login</button>
-                    </form>
-                </div>
+        <div class="card">
+            <img class="card-img" src="~/images/headphone.jpg" alt="Headphone" />
+            <div class="card-img-overlay">
+                <h4 class="card-text"> Music </h4>
+                <p class="card-text"> We have millions of songs to choose from.</p>
+                <h4 class="card-text"> Playlists </h4>
+                <p class="card-text"> Create your playlists that matches your taste. </p>
+                <h4 class="card-text"> Access it any time </h4>
+                <p class="card-text"> View your playlist from home, work, and anywhere at any time.</p>
             </div>
-        @*</div>*@
-
+            <div class="card-img-overlay login-div">
+                <form class="card-form" asp-controller="User" asp-action="Home">
+                    <h4 class="card-text"> Login or Create Username </h4>
+                    <input type="text" name="username">
+                    <button type="submit" class="btn btn-outline-primary text-dark">Create / Login</button>
+                </form>
+            </div>
+        </div>
     </main>
 
 </body>

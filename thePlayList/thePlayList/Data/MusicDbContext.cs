@@ -17,5 +17,6 @@ namespace thePlayList.Data
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<Song> Song { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<PlAndUserJoins> Joins { get; set; }
     }
 }

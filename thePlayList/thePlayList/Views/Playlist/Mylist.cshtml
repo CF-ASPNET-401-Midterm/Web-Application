@@ -4,8 +4,6 @@
 
 
 
-
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,10 +20,14 @@
     <header>
         <nav class='navbar navbar-fixed-top'>
             <div>
-                <a asp-action="Mylist" asp-controller="User"> HOME </a>
-                <a asp-action="API" asp-controller=""> API </a>
+                <a asp-action="Mylist" asp-controller="Playlist"> HOME </a>
+                <a asp-action="" asp-controller="Playlist"> All Playlists </a>
                 <a asp-action="About Us" asp-controller=""> About Us </a>
                 <a asp-action="Home" asp-controller=""> Log Out </a>
+                @{
+                    var user = ViewData["user"] as User;
+                    <a>Hi, @user.Name</a>
+                }
             </div>
         </nav>
     </header>

@@ -1,9 +1,8 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model PlaylistViewModel
 
+
+
+<html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="~/css/normalize.css" type="text/css" />
@@ -14,15 +13,37 @@
     <link rel="stylesheet" href="~/css/layout.css" type="text/css" />
     <link rel="stylesheet" href="~/css/modules.css" type="text/css" />
 </head>
+
 <body>
     <header>
         <nav class='navbar navbar-fixed-top'>
             <div>
-                <a asp-action="Mylist" asp-controller="User"> HOME </a>
-                <a asp-action="Playlist" asp-controller=""> All Playlists </a>
+                <a asp-action="Mylist" asp-controller="Playlist"> HOME </a>
+                <a asp-action="" asp-controller="Playlist"> All Playlists </a>
                 <a asp-action="About Us" asp-controller=""> About Us </a>
                 <a asp-action="Home" asp-controller=""> Log Out </a>
+                @{
+                    var user = ViewData["user"] as User;
+                    <a>Hi, @user.Name</a>
+                }
             </div>
         </nav>
     </header>
+    <main>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Playlists[0].Name)
+                    </th>
+                    <th>                        </th>
+                </tr>
+            </thead>
+
+
+        </table>
+    </main>
 </body>
+
+<footer></footer>
+</html>
