@@ -11,5 +11,7 @@ namespace thePlayList.Models
         public List<Playlist> Playlists { get; set; }
 
         public List<Song> Songs { get; set; }
+
+        //public User User { get; set; }
     }
 }
