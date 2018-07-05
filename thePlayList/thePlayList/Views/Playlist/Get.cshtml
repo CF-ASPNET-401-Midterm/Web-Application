@@ -21,10 +21,10 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" asp-action="Get" asp-controller="User">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" asp-action="Info" asp-controller="User" asp-route-id="@Model.User.Id">My User Info</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" asp-action="Mylist" asp-controller="Playlist">My Playlist</a>
+                        <a class="nav-link" asp-action="Mylist" asp-controller="Playlist"><span class="sr-only">(current)</span>My Playlist</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">About Us</a>
@@ -36,6 +36,7 @@
     <main>
         <div class="label">
             <h2> My Playlist </h2>
+            <a asp-action="Edit" asp-controller="User" asp-route-id="@Model.User.Id">Edit Username </a>
         </div>
         <table class="table">
             <thead>

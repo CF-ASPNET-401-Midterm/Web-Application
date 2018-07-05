@@ -1,4 +1,4 @@
-﻿@model User
+﻿@model PlaylistViewModel
 
 
 
@@ -39,12 +39,12 @@
         <h2> Change your User name </h2>
 
         <form asp-form="Edit" method="Post">
-            <label asp-route-id="@Model.Id" name="newusername"> @Model.Name </label>
+            <label asp-route-id="@Model.User.Id" name="newusername"> @Model.User.Name </label>
             <input name="newusername" />
             <button type="submit"> Save Change </button>
         </form>
 
-        <a asp-action="Delete" asp-route-id="@Model.Id"> Delete This user </a>
+        <a asp-action="Delete" asp-route-id="@Model.User.Id"> Delete This user </a>
 
     </main>
     <!-- Bootstrap core JavaScript
