@@ -10,7 +10,7 @@ using thePlayList.Data;
 namespace thePlayList.Migrations
 {
     [DbContext(typeof(MusicDbContext))]
-    [Migration("20180705232830_initial")]
+    [Migration("20180705234448_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
