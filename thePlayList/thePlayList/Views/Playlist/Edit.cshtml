@@ -1,10 +1,5 @@
 ﻿@model PlaylistViewModel
 
-
-@*@{ 
-    var playlists = ViewData["user"];
-}*@
-
 <html>
 <head>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
@@ -29,24 +24,23 @@
         <h3> Welcome select your new playlist! </h3>
         <div>
             <img class="genre-img" />
-            @foreach (var list in @Model.Playlists)
-            {
+            @*@foreach (var list in ViewData["Playlists"] as IList<Playlist>)
+                {
                 <form asp-action="Edit">
                     <div class="form-group">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="@Model.User.Id" />
+                        <input type="hidden" asp-for="Id" />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="@Model.User.Name" />
-                        <input asp-for="@Model.User.DatGenreEyeDee" class="form-control hide" value="@list.GenreID" />
+                        <input type="hidden" asp-for="Name" />
+                        <input asp-for="DatGenreEyeDee" class="form-control hide" value="@list.GenreID" />
                         <input type="submit" value="@list.Name" class="btn btn-default" />
                     </div>
-                </form>
+                </form>*@
 
-            }
+            @*}*@
         </div>
-<a asp-action="CreateCustomPlaylist" asp-route-id="@Model.User.Id"> CUstom playlist </a>
-
     </main>
 </body>
 
+<footer></footer>
 </html>

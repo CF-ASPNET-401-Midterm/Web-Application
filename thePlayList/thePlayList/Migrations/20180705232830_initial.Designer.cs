@@ -10,7 +10,7 @@ using thePlayList.Data;
 namespace thePlayList.Migrations
 {
     [DbContext(typeof(MusicDbContext))]
-    [Migration("20180705215158_initial")]
+    [Migration("20180705232830_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,7 +54,7 @@ namespace thePlayList.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("PlaylistId");
+                    b.Property<int?>("PlaylistId");
 
                     b.Property<DateTime>("ReleaseDate");
 
@@ -87,8 +87,7 @@ namespace thePlayList.Migrations
                 {
                     b.HasOne("thePlayList.Models.Playlist")
                         .WithMany("Songs")
-                        .HasForeignKey("PlaylistId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PlaylistId");
                 });
 #pragma warning restore 612, 618
         }

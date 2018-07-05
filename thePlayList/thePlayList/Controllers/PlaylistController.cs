@@ -3,13 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using thePlayList.Data;
 using thePlayList.Models;
-
 
 namespace thePlayList.Controllers
 {
@@ -111,9 +109,8 @@ namespace thePlayList.Controllers
 
         */
 
-        // replacing MyList method
         [HttpGet]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Mylist(int id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             using (var client = new HttpClient())
@@ -126,7 +123,7 @@ namespace thePlayList.Controllers
                 if (playlistResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
                 {
                     var jsonDatapl = await playlistResponse.Content.ReadAsStringAsync();
-                   // var jsonDataSong = await songResponse.Content.ReadAsStringAsync();
+                    // var jsonDataSong = await songResponse.Content.ReadAsStringAsync();
 
                     List<Playlist> rawAllList = JsonConvert.DeserializeObject<List<Playlist>>(jsonDatapl);
                     //SongRoot rawAllSongs = JsonConvert.DeserializeObject<SongRoot>(jsonDataSong);
@@ -134,12 +131,13 @@ namespace thePlayList.Controllers
                     var allPlaylists = from a in rawAllList
                                        select a;
 
-                   // var allSongs = from s in rawAllSongs.Songs
-                                  // select s;
+                    // var allSongs = from s in rawAllSongs.Songs
+                    // select s;
 
                     var myPlaylist = allPlaylists.FirstOrDefault(p => p.Id == user.DatListEyeDee);
                     myPlaylist.YouserEyeDee = user.Id;
                     myPlaylist.Id = null;
+                    myPlaylist.Songs = _context.Songs.Where(s => s.PlaylistId == user.DatListEyeDee).ToList();
 
                     await _context.Playlists.AddAsync(myPlaylist);
                     await _context.SaveChangesAsync();
@@ -156,10 +154,56 @@ namespace thePlayList.Controllers
             }
         }
 
+        // replacing MyList method
+        [HttpGet]
+        public async Task<IActionResult> Get(int id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");
+
+                var playlistResponse = client.GetAsync("/api/playlist").Result;
+                var songResponse = client.GetAsync($"/api/playlist/{user.DatListEyeDee}").Result;
+
+                if (playlistResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
+                {
+                    var jsonDatapl = await playlistResponse.Content.ReadAsStringAsync();
+                    var jsonDataSong = await songResponse.Content.ReadAsStringAsync();
+
+                    List<Playlist> rawAllList = JsonConvert.DeserializeObject<List<Playlist>>(jsonDatapl);
+                    //List<Song> rawAllSongs = JsonConvert.DeserializeObject<List<Song>>(jsonDataSong);
+
+                    var allPlaylists = from a in rawAllList
+                                       select a;
+
+                    //var allSongs = from s in rawAllSongs
+                    //               select s;
+
+                    var myPlaylist = allPlaylists.FirstOrDefault(p => p.Id == user.DatListEyeDee);
+                    myPlaylist.YouserEyeDee = user.Id;
+                    myPlaylist.Id = null;
+                    //allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
+
+
+                    await _context.Playlists.AddAsync(myPlaylist);
+                    await _context.SaveChangesAsync();
+
+                    PlaylistViewModel mylistVM = new PlaylistViewModel();
+                    //mylistVM.Songs = allSongs.Where(s => s.DatListEyeDee == user.DatListEyeDee).ToList();
+                    mylistVM.Playlists = allPlaylists.Where(pl => pl.GenreID == user.DatGenreEyeDee).ToList();
+                    mylistVM.User = user;
+
+                    return RedirectToAction("Mylist", new { id = user.Id });
+                }
+                return NotFound();
+            }
+        }
+
         // Grabbed these code from Usercontroller- NewUser method
         // Picking a playlist 
         [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Create(int id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             using (var client = new HttpClient())
@@ -208,35 +252,6 @@ namespace thePlayList.Controllers
                     PlaylistViewModel mylistVM = new PlaylistViewModel();
                     user.DatListEyeDee = allPlaylists.FirstOrDefault(pl => pl.GenreID == user.DatGenreEyeDee).Id.Value;
 
-                    var songResponse = client.GetAsync($"/api/playlist/{user.DatListEyeDee}").Result;
-                    if (!songResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
-                    {
-                        return NotFound();
-                    }
-                    var jsonDataSong = await songResponse.Content.ReadAsStringAsync();
-                    SongRoot rawAllSongs = JsonConvert.DeserializeObject<SongRoot>(jsonDataSong);
-
-                    var allSongs = from s in rawAllSongs.Songs
-                                   select s;
-
-                    List<ApiSong> userSongs = allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
-
-                    foreach (ApiSong song in userSongs)
-                    {
-                        Song newsong = new Song();
-                        //newsong.ID = null;
-                        newsong.Name = song.Name;
-                        //newsong.PlaylistId = song.PlaylistID;
-                        newsong.DatListEyeDee = song.PlaylistID;
-                        newsong.ReleaseDate = song.ReleaseDate;
-                        newsong.Album = song.Album;
-                        newsong.Artist = song.Artist;
-                        newsong.Genre = song.Genre;
-
-                        await _context.Songs.AddAsync(newsong);
-                        await _context.SaveChangesAsync();
-                    }
-
                     _context.Users.Update(user);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Get", "Playlist", new { id = user.Id });
@@ -244,92 +259,6 @@ namespace thePlayList.Controllers
                 return NotFound();
             }
         }
-
-        /*
-        // Creating custom playlist
-        public async Task<IActionResult> CreateCustomPlaylist(int userId)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-
-            using (var client = new HttpClient())
-            {
-               client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");
-
-                //var songsResponse = client.GetAsync("/api/song").Result;
-
-                // if (songsResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
-                //  {
-                //    var jsonDataSongs = await songsResponse.Content.ReadAsStringAsync();
-
-                //List<ApiSong> rawAllSongs = JsonConvert.DeserializeObject<List<ApiSong>>("~/json/jsconfig.json");
-
-
-
-                List<ApiSong> rawAllSongs = new List<ApiSong>();
-
-
-                rawAllSongs.Add(new ApiSong({ Name = "One", Artist="oneArtist", Album="first Album", Genre="Blue", ID = 4003 , PlaylistID = 4003}));
-                rawAllSongs.Add(new ApiSong({ Name = "Two", Artist = "oneArtist", Album = "first Album", Genre = "Blue", ID = 4003, PlaylistID = 4003 }));
-                rawAllSongs.Add(new ApiSong({ Name = "One", Artist = "oneArtist", Album = "first Album", Genre = "Blue", ID = 4003, PlaylistID = 4003 }));
-                
-
-                var allSongs = from a in rawAllSongs
-                                   select a;
-
-                    var sortedSongs = allSongs.ToList();
-                    //var sortedSongs = allSongs.OrderBy(s => s.ID).ToList();
-
-                    List<int> idRef = new List<int>();
-                    List<Song> customList = new List<Song>();
-                    Playlist playlist = new Playlist();
-
-                    for (int i = 0; i < 74; i++)
-                    {
-                        Random rdm = new Random();
-                        int id = rdm.Next(0, sortedSongs.Count());
-
-                        if (!idRef.Contains(id))
-                        {
-                            idRef.Add(id);
-
-                            ApiSong apiSong = sortedSongs.Find(s => s.ID == id);
-
-                            Song newsong = new Song();
-
-                            newsong.Name = apiSong.Name;
-                            newsong.PlaylistId = playlist.Id.Value;
-                            newsong.DatListEyeDee = apiSong.PlaylistID;
-                            newsong.ReleaseDate = apiSong.ReleaseDate;
-                            newsong.Album = apiSong.Album;
-                            newsong.Artist = apiSong.Artist;
-                            newsong.Genre = apiSong.Genre;
-
-                            customList.Add(newsong);
-
-                            await _context.Songs.AddAsync(newsong);
-                            await _context.SaveChangesAsync();
-
-
-                        }
-                        else
-                        {
-                            i--;
-                        }
-                    }
-                    playlist.YouserEyeDee = user.Id;
-                    user.DatListEyeDee = playlist.Id.Value;
-
-                    await _context.Users.AddAsync(user);
-                    await _context.Playlists.AddAsync(playlist);
-                    await _context.SaveChangesAsync();
-
-                    return RedirectToAction("Get", "Playlist", new { id = user.Id });
-                //}
-               // return NotFound();
-            }
-        }
-*/
-
 
 
         public async Task<IActionResult> Delete(int userId)
@@ -345,113 +274,63 @@ namespace thePlayList.Controllers
 
             return RedirectToAction("Edit", new { id = user.Id });
         }
-
-
-
-        /*
-        [HttpGet("{id}", Name = "GetPlaylist")]
-        public async Task<IActionResult> GetPlaylistByID([FromRoute]int id)
-        {
-            var playlist = _context.Playlists.FirstOrDefault(l => l.ID == id);
-            if (playlist == null)
-            {
-                return NotFound();
-            }
-            playlist.Songs = await _context.Songs.Where(i => i.PlaylistID == id).ToListAsync();
-
-            return Ok(playlist);
-        }
-
-
-        [HttpPost("{genreID}")]
-        public async Task<IActionResult> PostByGenre(int? genreID)
-        {
-            List<Song> ofSongs = new List<Song>();
-            Playlist playlist = new Playlist();
-            playlist.GenreID = (genreID != null) ? genreID : 0;
-            playlist.Songs = playlist.CreatePlaylist(ofSongs, genreID).Result;
-            playlist.Name = (genreID != null) ? playlist.Songs[0].Genre : "Unknown";
-
-            await _context.Playlists.AddAsync(playlist);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtRoute("GetPlaylist", new { id = playlist.ID }, playlist);
-
-        }
-
-        [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var playlist = await _context.Playlists.FindAsync(id);
-
-            if (playlist == null)
-            {
-                return NotFound();
-            }
-
-            List<Song> songs = await _context.Songs.Where(i => i.PlaylistID == id).ToListAsync();
-
-            foreach (Song song in songs)
-            {
-                _context.Songs.Remove(song);
-            }
-
-            _context.Playlists.Remove(playlist);
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
     }
-    */
 
-        /*
 
-                using (var client = new HttpClient())
-            {
-                string query = $"&f_music_genre_id={genreID}";
+    /*
+    [HttpGet("{id}", Name = "GetPlaylist")]
+    public async Task<IActionResult> GetPlaylistByID([FromRoute]int id)
+    {
+        var playlist = _context.Playlists.FirstOrDefault(l => l.ID == id);
+        if (playlist == null)
+        {
+            return NotFound();
+        }
+        playlist.Songs = await _context.Songs.Where(i => i.PlaylistID == id).ToListAsync();
 
-                // add the appropriate properties on top of the client base address.
-                client.BaseAddress = new Uri("https://api.musixmatch.com/");
-
-                //Json object from 3rd party api : the .Result is important for us to extract the result of the response from the call
-                var response = client.GetAsync($"ws/1.1/track.search?format=json&callback=callback{query}&page_size=75&apikey=2bb0516b2619119643fd7b179a16f8b0").Result;
-                if (response.EnsureSuccessStatusCode().IsSuccessStatusCode)
-                {
-
-                    Random num = new Random();
-                    // holds the already selected numbers
-                    List<int> m = new List<int>();
-                    var stringResult = await response.Content.ReadAsStringAsync();
-                    Music item = JsonConvert.DeserializeObject<Music>(stringResult);
-                    List<TrackList> newList = new List<TrackList>();
-                    for (int i = 0; i < 8; i++)
-                    {
-                        int j = num.Next(0, item.Message.Body.Track_list.Count());
-                        if (!m.Contains(j))
-                        {
-                            m.Add(j);
-                            newList.Add(item.Message.Body.Track_list[j]);
-                        }
-                        else
-                        {
-                            i--;
-                        }
-                    }
-                    foreach (TrackList track in newList)
-                    {
-                        Song song = new Song()
-                        {
-                            Name = track.Track.Track_name,
-                            Artist = track.Track.Artist_name,
-                            Album = track.Track.Album_name,
-                            Genre = track.Track.Primary_genres.Music_genre_list[0].Music_genre.Music_genre_name,
-                            ReleaseDate = track.Track.First_release_date
-                        };
-                        ofSongs.Add(song);
-                    };
-                }
-                return ofSongs;
-            */
+        return Ok(playlist);
     }
+
+
+    [HttpPost("{genreID}")]
+    public async Task<IActionResult> PostByGenre(int? genreID)
+    {
+        List<Song> ofSongs = new List<Song>();
+        Playlist playlist = new Playlist();
+        playlist.GenreID = (genreID != null) ? genreID : 0;
+        playlist.Songs = playlist.CreatePlaylist(ofSongs, genreID).Result;
+        playlist.Name = (genreID != null) ? playlist.Songs[0].Genre : "Unknown";
+
+        await _context.Playlists.AddAsync(playlist);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtRoute("GetPlaylist", new { id = playlist.ID }, playlist);
+
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var playlist = await _context.Playlists.FindAsync(id);
+
+        if (playlist == null)
+        {
+            return NotFound();
+        }
+
+        List<Song> songs = await _context.Songs.Where(i => i.PlaylistID == id).ToListAsync();
+
+        foreach (Song song in songs)
+        {
+            _context.Songs.Remove(song);
+        }
+
+        _context.Playlists.Remove(playlist);
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
+}
+*/
 
 
 }

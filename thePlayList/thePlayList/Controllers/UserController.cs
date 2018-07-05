@@ -31,6 +31,25 @@ namespace thePlayList.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Info(int id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user != null)
+            {
+                var rawPlaylist = _context.Playlists.Where(p => p.YouserEyeDee == user.Id).ToList();
+
+                PlaylistViewModel plVM = new PlaylistViewModel();
+                plVM.Playlists = rawPlaylist;
+                plVM.User = user;
+                return View(plVM);
+            }
+            else
+            {
+                return RedirectToAction("Get");
+            }
+        }
+
         /// <summary>
         /// Once user input the username, this method will find any existing username saved in the database
         /// </summary>
@@ -47,15 +66,15 @@ namespace thePlayList.Controllers
                 newuser.Name = username;
                 await _context.Users.AddAsync(newuser);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Edit", "Playlist", new { id = newuser.Id });
+                return RedirectToAction("Create", "Playlist", new { id = newuser.Id });
             }
 
-            if(user.DatListEyeDee == 0)
+            if (user.DatListEyeDee == 0)
             {
-                return RedirectToAction("Edit", "Playlist", new { id = user.Id });
+                return RedirectToAction("Create", "Playlist", new { id = user.Id });
             }
 
-            return RedirectToAction("Get", "Playlist", new { id = user.Id });
+            return RedirectToAction("Mylist", "Playlist", new { id = user.Id });
         }
 
         // Edit username
@@ -64,9 +83,9 @@ namespace thePlayList.Controllers
         {
             var user = _context.Users.Find(id);
 
-            if(user == null)
+            if (user == null)
             {
-                return RedirectToAction("Get", "Playlist", new { id = id });
+                return RedirectToAction("Get", "User");
             }
 
             return View(user);
@@ -79,7 +98,7 @@ namespace thePlayList.Controllers
             var user = _context.Users.Find(id);
 
             // Return back to page if username already exist
-            if(user == null)
+            if (user == null)
             {
                 return View(user);
             }
@@ -88,7 +107,7 @@ namespace thePlayList.Controllers
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Get", "Playlist", new { id = user.Id });
+            return RedirectToAction("Mylist", "Playlist", new { id = user.Id });
         }
 
 
@@ -157,6 +176,6 @@ namespace thePlayList.Controllers
         //        return NotFound();
         //    }
         //}
-       
+
     }
 }

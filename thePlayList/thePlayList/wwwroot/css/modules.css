@@ -65,3 +65,8 @@ p.card-text {
 .hide {
     display:none;
 }
+
+#edit {
+    padding-left:2em;
+    font-size:.75em;
+}

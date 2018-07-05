@@ -48,7 +48,7 @@ namespace thePlayList.Migrations
                     Artist = table.Column<string>(nullable: true),
                     Album = table.Column<string>(nullable: true),
                     Genre = table.Column<string>(nullable: true),
-                    PlaylistId = table.Column<int>(nullable: false),
+                    PlaylistId = table.Column<int>(nullable: true),
                     DatListEyeDee = table.Column<int>(nullable: false),
                     ReleaseDate = table.Column<DateTime>(nullable: false)
                 },
@@ -60,7 +60,7 @@ namespace thePlayList.Migrations
                         column: x => x.PlaylistId,
                         principalTable: "Playlists",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
