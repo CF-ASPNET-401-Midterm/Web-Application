@@ -7,7 +7,8 @@ namespace thePlayList.Models
 {
     public class Playlist
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
+       // public int ApiId { get; set; }
         public string Name { get; set; }
         public int GenreID { get; set; }
         public int YouserEyeDee { get; set; }
