@@ -28,8 +28,8 @@ namespace thePlayList
             services.AddMvc();
 
             services.AddDbContext<MusicDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("AzureDeployment")));
-            //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //options.UseSqlServer(Configuration.GetConnectionString("AzureDeployment")));
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,7 +44,7 @@ namespace thePlayList
            {
                routes.MapRoute(
                    name: "default",
-                   template: "{controller=User}/{action=Home}/{id?}");
+                   template: "{controller=Home}/{action=Index}/{id?}");
            });
 
             app.UseStaticFiles();

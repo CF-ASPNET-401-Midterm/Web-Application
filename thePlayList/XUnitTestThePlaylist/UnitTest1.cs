@@ -28,7 +28,7 @@ namespace XUnitTestThePlaylist
                 UserController testUC = new UserController(context);
 
                 // act
-                await testUC.Home("Bob");
+                await testUC.Get("Bob");
 
                 var results1 = context.Users.Where(u => u.Name == "Bob");
                 var results2 = context.Users.Where(u => u.Name == "Todd");
@@ -37,22 +37,22 @@ namespace XUnitTestThePlaylist
                 Assert.Equal(1, results1.Count());
                 Assert.Equal(0, results2.Count());
 
-                await testUC.Home("Bob");
+                await testUC.Get("Bob");
 
                 // assert that there is still one instance of results
                 Assert.Equal(1, results1.Count());
             }
         }
 
-        [Fact]
-        public async void CanEditUser()
-        {
-            DbContextOptions<MusicDbContext> options = new DbContextOptionsBuilder<MusicDbContext>()
-    .UseInMemoryDatabase("EditUserDB").Options;
-            using (MusicDbContext context = new MusicDbContext(options))
-            {
- 
-            }
-        }
+    //    [Fact]
+    //    public async void CanEditUser()
+    //    {
+    //        DbContextOptions<MusicDbContext> options = new DbContextOptionsBuilder<MusicDbContext>()
+    //.UseInMemoryDatabase("EditUserDB").Options;
+    //        using (MusicDbContext context = new MusicDbContext(options))
+    //        {
+                
+    //        }
+    //    }
     }
 }

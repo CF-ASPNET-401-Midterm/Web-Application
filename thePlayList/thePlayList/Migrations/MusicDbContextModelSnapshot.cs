@@ -15,17 +15,21 @@ namespace thePlayList.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
+                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("thePlayList.Models.Playlist", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("GenreID");
+
                     b.Property<string>("Name");
+
+                    b.Property<int>("YouserEyeDee");
 
                     b.HasKey("Id");
 
@@ -34,7 +38,7 @@ namespace thePlayList.Migrations
 
             modelBuilder.Entity("thePlayList.Models.Song", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -42,17 +46,21 @@ namespace thePlayList.Migrations
 
                     b.Property<string>("Artist");
 
+                    b.Property<int>("DatListEyeDee");
+
+                    b.Property<string>("Genre");
+
+                    b.Property<string>("Name");
+
                     b.Property<int?>("PlaylistId");
 
                     b.Property<DateTime>("ReleaseDate");
 
-                    b.Property<string>("Title");
-
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
                     b.HasIndex("PlaylistId");
 
-                    b.ToTable("Song");
+                    b.ToTable("Songs");
                 });
 
             modelBuilder.Entity("thePlayList.Models.User", b =>
@@ -61,9 +69,12 @@ namespace thePlayList.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("DatGenreEyeDee");
+
                     b.Property<int>("DatListEyeDee");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
 

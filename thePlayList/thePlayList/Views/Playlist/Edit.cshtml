@@ -1,9 +1,4 @@
-﻿@model User
-
-
-@*@{ 
-    var playlists = ViewData["user"];
-}*@
+﻿@model PlaylistViewModel
 
 <html>
 <head>
@@ -29,9 +24,9 @@
         <h3> Welcome select your new playlist! </h3>
         <div>
             <img class="genre-img" />
-            @foreach (var list in ViewData["Playlists"] as IList<Playlist>)
-            {
-                <form asp-action="NewUser">
+            @*@foreach (var list in ViewData["Playlists"] as IList<Playlist>)
+                {
+                <form asp-action="Edit">
                     <div class="form-group">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="Id" />
@@ -40,13 +35,12 @@
                         <input asp-for="DatGenreEyeDee" class="form-control hide" value="@list.GenreID" />
                         <input type="submit" value="@list.Name" class="btn btn-default" />
                     </div>
-                </form>
+                </form>*@
 
-            }
+            @*}*@
         </div>
     </main>
 </body>
 
-<footer>
-</footer>
+<footer></footer>
 </html>

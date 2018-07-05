@@ -1,0 +1,72 @@
+﻿img {
+    width: 100%;
+    height:auto;
+}
+
+.card-img-overlay {
+    padding-top: 5em;
+    padding-left: 5em;
+    color: white;
+    font-family: 'Markazi Text', serif;
+}
+
+h4.card-text {
+    font-size: 3em;
+    padding: .3em;
+   
+}
+
+p.card-text {   
+    font-size: 2em;
+    padding: .3em;
+}
+
+
+
+.card-form {
+    background-color: white;
+    float: right;
+    margin-right: 8%;
+    padding: 2em;
+    text-align: center;
+}
+
+    .card-form h4 {
+        margin: .3em;
+        color: black;
+    }
+
+    .card-form input {
+        margin: 1em;
+    }
+
+.card-form button {
+    padding: .1em;
+    margin: 1em;
+    font-size: 1.5em;
+}
+
+/*header {
+    margin-bottom:10em;
+}*/
+
+/*#something {
+    margin-bottom:10em;
+}*/
+
+/*body {
+    padding-top:10em;
+}*/
+
+.navbar-fixed-top {
+    display: block;
+}
+
+.hide {
+    display:none;
+}
+
+#edit {
+    padding-left:2em;
+    font-size:.75em;
+}
