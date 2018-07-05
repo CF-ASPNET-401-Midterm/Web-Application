@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace thePlayList.Models
 {
-    public class PlaylistViewModel
+    public class PlaylistViewModel : Controller
     {
         public List<Playlist> Playlists { get; set; }
 
         public List<Song> Songs { get; set; }
 
-        public User User { get; set; }
+        //public User User { get; set; }
     }
 }
