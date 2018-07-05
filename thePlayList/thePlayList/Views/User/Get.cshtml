@@ -18,10 +18,11 @@
 <body>
     <header>
         <div class="container">
-            <nav class="nav justify-content-center navbar fixed-top bg-dark text-white">  
+            <nav class="nav justify-content-center navbar fixed-top bg-dark text-white">
                 <a class="nav-link active" asp-action="HOME" asp-controller="HOME"> HOME </a>
                 <a class="nav-link" asp-action="API" asp-controller="API"> API </a>
                 <a class="nav-link" asp-action="About Us" asp-controller="About Us"> About Us </a>
+                <a asp-action="Home" asp-controller=""> Log Out </a>
             </nav>
         </div>
     </header>
@@ -38,7 +39,7 @@
                     <p class="card-text"> View your playlist from home, work, and anywhere at any time.</p>
                 </div>
                 <div class="card-img-overlay login-div">
-                    <form class="card-form" asp-controller="User" asp-action="Home">
+                    <form class="card-form" asp-controller="User" asp-action="Get">
                         <h4 class="card-text"> Login or Create Username </h4>
                         <input type="text" name="username">
                         <button type="submit" class="btn btn-outline-primary text-dark">Create / Login</button>

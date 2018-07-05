@@ -45,3 +45,23 @@ p.card-text {
     margin: 1em;
     font-size: 1.5em;
 }
+
+/*header {
+    margin-bottom:10em;
+}*/
+
+/*#something {
+    margin-bottom:10em;
+}*/
+
+/*body {
+    padding-top:10em;
+}*/
+
+.navbar-fixed-top {
+    display: block;
+}
+
+.hide {
+    display:none;
+}

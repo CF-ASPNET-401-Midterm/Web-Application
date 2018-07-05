@@ -31,7 +31,7 @@
             <img class="genre-img" />
             @foreach (var list in ViewData["Playlists"] as IList<Playlist>)
             {
-                <form asp-action="NewUser">
+                <form asp-action="Edit">
                     <div class="form-group">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="Id" />

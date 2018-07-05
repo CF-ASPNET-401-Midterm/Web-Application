@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace thePlayList.Models
 {
-    public class PlaylistViewModel : Controller
+    public class SongRoot
     {
-        public List<Playlist> Playlists { get; set; }
-
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int GenreID { get; set; }
         public List<Song> Songs { get; set; }
     }
 }
