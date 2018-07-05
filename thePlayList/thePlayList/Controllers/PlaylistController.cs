@@ -13,7 +13,7 @@ namespace thePlayList.Controllers
 {
     public class PlaylistController : Controller
     {
-        private MusicDbContext _context { get; set;} 
+        private MusicDbContext _context { get; set; }
 
         public PlaylistController(MusicDbContext context)
         {
@@ -136,17 +136,18 @@ namespace thePlayList.Controllers
                                    select s;
 
                     var myPlaylist = allPlaylists.FirstOrDefault(p => p.Id == user.DatListEyeDee);
+                    myPlaylist.Songs = allSongs.ToList();
                     myPlaylist.YouserEyeDee = user.Id;
                     myPlaylist.Id = 0;
                     //allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
-
 
                     await _context.Playlists.AddAsync(myPlaylist);
                     await _context.SaveChangesAsync();
 
                     PlaylistViewModel mylistVM = new PlaylistViewModel();
-                    mylistVM.Songs = allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
-                    mylistVM.Playlists = allPlaylists.Where( pl => pl.GenreID == user.DatGenreEyeDee).ToList();
+                    mylistVM.Songs = myPlaylist.Songs;
+                    //mylistVM.Songs = allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
+                    mylistVM.Playlists = allPlaylists.Where(pl => pl.GenreID == user.DatGenreEyeDee).ToList();
                     mylistVM.User = user;
 
                     return View(mylistVM);
@@ -154,7 +155,7 @@ namespace thePlayList.Controllers
                 return NotFound();
             }
         }
-        
+
         // Grabbed these code from Usercontroller- NewUser method
         // Picking a playlist 
         [HttpGet]
@@ -200,7 +201,7 @@ namespace thePlayList.Controllers
                     var jsonDataPl = await plResponse.Content.ReadAsStringAsync();
 
                     List<Playlist> rawAllPlaylists = JsonConvert.DeserializeObject<List<Playlist>>(jsonDataPl);
-                     
+
                     var allPlaylists = from a in rawAllPlaylists
                                        select a;
 
@@ -214,6 +215,64 @@ namespace thePlayList.Controllers
                 return NotFound();
             }
         }
+
+        // Creating custom playlist
+        public async Task<IActionResult> CreateCustomPlaylist(int userId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");
+
+                var songsResponse = client.GetAsync("/api/song").Result;
+
+                if (songsResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
+                {
+                    var jsonDataSongs = await songsResponse.Content.ReadAsStringAsync();
+
+                    List<Song> rawAllSongs = JsonConvert.DeserializeObject<List<Song>>(jsonDataSongs);
+
+                    var allSongs = from a in rawAllSongs
+                                   select a;
+
+                    var sortedSongs = allSongs.OrderBy(s => s.ID).ToList();
+
+                    List<int> idRef = new List<int>();
+                    List<Song> customList = new List<Song>();
+                    Playlist playlist = new Playlist();
+
+                    for (int i = 0; i < 74; i++)
+                    {
+                        Random rdm = new Random();
+                        int id = rdm.Next(0, sortedSongs.Count());
+                        if (!idRef.Contains(id))
+                        {
+                            idRef.Add(id);
+                            Song newSong = sortedSongs.Find(s => s.ID == id);
+                            newSong.PlaylistID = playlist.Id;
+                            customList.Add(newSong);
+                            await _context.Songs.AddAsync(newSong);
+                        }
+                        else
+                        {
+                            i--;
+                        }
+                    }
+                    playlist.YouserEyeDee = user.Id;
+                    user.DatListEyeDee = playlist.Id;
+
+                    await _context.Users.AddAsync(user);
+                    await _context.Playlists.AddAsync(playlist);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Get", "Playlist", new { id = user.Id });
+                }
+                return NotFound();
+            }
+        }
+
+
 
 
         public async Task<IActionResult> Delete(int userId)
@@ -229,7 +288,7 @@ namespace thePlayList.Controllers
 
             return RedirectToAction("Edit", new { id = user.Id });
         }
-    }
+
 
 
         /*
@@ -246,7 +305,7 @@ namespace thePlayList.Controllers
             return Ok(playlist);
         }
 
-        
+
         [HttpPost("{genreID}")]
         public async Task<IActionResult> PostByGenre(int? genreID)
         {
@@ -286,6 +345,56 @@ namespace thePlayList.Controllers
         }
     }
     */
+
+        /*
+
+                using (var client = new HttpClient())
+            {
+                string query = $"&f_music_genre_id={genreID}";
+
+                // add the appropriate properties on top of the client base address.
+                client.BaseAddress = new Uri("https://api.musixmatch.com/");
+
+                //Json object from 3rd party api : the .Result is important for us to extract the result of the response from the call
+                var response = client.GetAsync($"ws/1.1/track.search?format=json&callback=callback{query}&page_size=75&apikey=2bb0516b2619119643fd7b179a16f8b0").Result;
+                if (response.EnsureSuccessStatusCode().IsSuccessStatusCode)
+                {
+
+                    Random num = new Random();
+                    // holds the already selected numbers
+                    List<int> m = new List<int>();
+                    var stringResult = await response.Content.ReadAsStringAsync();
+                    Music item = JsonConvert.DeserializeObject<Music>(stringResult);
+                    List<TrackList> newList = new List<TrackList>();
+                    for (int i = 0; i < 8; i++)
+                    {
+                        int j = num.Next(0, item.Message.Body.Track_list.Count());
+                        if (!m.Contains(j))
+                        {
+                            m.Add(j);
+                            newList.Add(item.Message.Body.Track_list[j]);
+                        }
+                        else
+                        {
+                            i--;
+                        }
+                    }
+                    foreach (TrackList track in newList)
+                    {
+                        Song song = new Song()
+                        {
+                            Name = track.Track.Track_name,
+                            Artist = track.Track.Artist_name,
+                            Album = track.Track.Album_name,
+                            Genre = track.Track.Primary_genres.Music_genre_list[0].Music_genre.Music_genre_name,
+                            ReleaseDate = track.Track.First_release_date
+                        };
+                        ofSongs.Add(song);
+                    };
+                }
+                return ofSongs;
+            */
+    }
 
 
 }
