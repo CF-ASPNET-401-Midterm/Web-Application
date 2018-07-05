@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace thePlayList.Migrations
 {
-    public partial class preventDuplicates : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,7 +39,7 @@ namespace thePlayList.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Song",
+                name: "Songs",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
@@ -48,30 +48,31 @@ namespace thePlayList.Migrations
                     Artist = table.Column<string>(nullable: true),
                     Album = table.Column<string>(nullable: true),
                     Genre = table.Column<string>(nullable: true),
-                    PlaylistID = table.Column<int>(nullable: false),
+                    PlaylistId = table.Column<int>(nullable: true),
+                    DatListEyeDee = table.Column<int>(nullable: false),
                     ReleaseDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Song", x => x.ID);
+                    table.PrimaryKey("PK_Songs", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Song_Playlists_PlaylistID",
-                        column: x => x.PlaylistID,
+                        name: "FK_Songs_Playlists_PlaylistId",
+                        column: x => x.PlaylistId,
                         principalTable: "Playlists",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Song_PlaylistID",
-                table: "Song",
-                column: "PlaylistID");
+                name: "IX_Songs_PlaylistId",
+                table: "Songs",
+                column: "PlaylistId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Song");
+                name: "Songs");
 
             migrationBuilder.DropTable(
                 name: "Users");
