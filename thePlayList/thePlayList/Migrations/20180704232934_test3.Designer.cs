@@ -10,8 +10,8 @@ using thePlayList.Data;
 namespace thePlayList.Migrations
 {
     [DbContext(typeof(MusicDbContext))]
-    [Migration("20180705215158_initial")]
-    partial class initial
+    [Migration("20180704232934_test3")]
+    partial class test3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace thePlayList.Migrations
 
             modelBuilder.Entity("thePlayList.Models.Playlist", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -48,21 +48,19 @@ namespace thePlayList.Migrations
 
                     b.Property<string>("Artist");
 
-                    b.Property<int>("DatListEyeDee");
-
                     b.Property<string>("Genre");
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("PlaylistId");
+                    b.Property<int>("PlaylistID");
 
                     b.Property<DateTime>("ReleaseDate");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("PlaylistId");
+                    b.HasIndex("PlaylistID");
 
-                    b.ToTable("Songs");
+                    b.ToTable("Song");
                 });
 
             modelBuilder.Entity("thePlayList.Models.User", b =>
@@ -87,7 +85,7 @@ namespace thePlayList.Migrations
                 {
                     b.HasOne("thePlayList.Models.Playlist")
                         .WithMany("Songs")
-                        .HasForeignKey("PlaylistId")
+                        .HasForeignKey("PlaylistID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
