@@ -13,13 +13,14 @@ namespace thePlayList.Controllers
 {
     public class PlaylistController : Controller
     {
-        private MusicDbContext _context { get; set;}
+        private MusicDbContext _context { get; set;} 
 
         public PlaylistController(MusicDbContext context)
         {
             _context = context;
         }
 
+        /*
         public async Task<IActionResult> Home(string searchString)
         {
             using (var client = new HttpClient())
@@ -73,10 +74,6 @@ namespace thePlayList.Controllers
         [HttpGet]
         public async Task<IActionResult> MyList(int id)
         {
-            //if(user.PlaylistId == 0)
-            //{
-            //    return View();
-            //}
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             using (var client = new HttpClient())
@@ -109,5 +106,180 @@ namespace thePlayList.Controllers
                 return NotFound();
             }
         }
+
+        */
+
+        // replacing MyList method
+        [HttpGet]
+        public async Task<IActionResult> Get(int id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");
+
+                var playlistResponse = client.GetAsync("/api/playlist").Result;
+                var songResponse = client.GetAsync($"/api/playlist/{user.DatListEyeDee}").Result;
+
+                if (playlistResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
+                {
+                    var jsonDatapl = await playlistResponse.Content.ReadAsStringAsync();
+                    var jsonDataSong = await songResponse.Content.ReadAsStringAsync();
+
+                    List<Playlist> rawAllList = JsonConvert.DeserializeObject<List<Playlist>>(jsonDatapl);
+                    SongRoot rawAllSongs = JsonConvert.DeserializeObject<SongRoot>(jsonDataSong);
+
+                    var allPlaylists = from a in rawAllList
+                                       select a;
+
+                    var allSongs = from s in rawAllSongs.Songs
+                                   select s;
+
+                    Playlist myPlaylist = allPlaylists.FirstOrDefault(p => p.Id == user.DatListEyeDee);
+                    myPlaylist.YouserEyeDee = user.Id;
+                    //allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
+
+                    await _context.Playlists.AddAsync(myPlaylist);
+                    await _context.SaveChangesAsync();
+
+                    PlaylistViewModel mylistVM = new PlaylistViewModel();
+                    mylistVM.Songs = allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
+                    mylistVM.Playlists = allPlaylists.Where( pl => pl.GenreID == user.DatGenreEyeDee).ToList();
+
+                    return View(mylistVM);
+                }
+                return NotFound();
+            }
+        }
+        
+        // Grabbed these code from Usercontroller- NewUser method
+        // Picking a playlist 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");
+
+                var plResponse = client.GetAsync("/api/playlist").Result;
+
+                if (plResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
+                {
+                    var jsonDataPl = await plResponse.Content.ReadAsStringAsync();
+
+                    List<Playlist> rawAllPlaylists = JsonConvert.DeserializeObject<List<Playlist>>(jsonDataPl);
+
+                    var allPlaylists = from a in rawAllPlaylists
+                                       select a;
+
+                    ViewData["Playlists"] = rawAllPlaylists;
+                    return View(user);
+                }
+            }
+            return RedirectToAction("Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(User user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");
+
+                var plResponse = client.GetAsync("/api/playlist").Result;
+
+                if (plResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
+                {
+                    var jsonDataPl = await plResponse.Content.ReadAsStringAsync();
+
+                    List<Playlist> rawAllPlaylists = JsonConvert.DeserializeObject<List<Playlist>>(jsonDataPl);
+                     
+                    var allPlaylists = from a in rawAllPlaylists
+                                       select a;
+
+                    PlaylistViewModel mylistVM = new PlaylistViewModel();
+                    user.DatListEyeDee = allPlaylists.FirstOrDefault(pl => pl.GenreID == user.DatGenreEyeDee).Id;
+
+                    _context.Users.Update(user);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Get", "Playlist", new { id = user.Id });
+                }
+                return NotFound();
+            }
+        }
+
+
+        public async Task<IActionResult> Delete(int userId)
+        {
+            var user = _context.Users.Find(userId);
+            var playlist = _context.Playlists.Find(user.DatListEyeDee);
+            user.DatGenreEyeDee = 0;
+            user.DatListEyeDee = 0;
+
+            _context.Users.Update(user);
+            _context.Playlists.Remove(playlist);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Edit", new { id = user.Id });
+        }
     }
+
+
+        /*
+        [HttpGet("{id}", Name = "GetPlaylist")]
+        public async Task<IActionResult> GetPlaylistByID([FromRoute]int id)
+        {
+            var playlist = _context.Playlists.FirstOrDefault(l => l.ID == id);
+            if (playlist == null)
+            {
+                return NotFound();
+            }
+            playlist.Songs = await _context.Songs.Where(i => i.PlaylistID == id).ToListAsync();
+
+            return Ok(playlist);
+        }
+
+        
+        [HttpPost("{genreID}")]
+        public async Task<IActionResult> PostByGenre(int? genreID)
+        {
+            List<Song> ofSongs = new List<Song>();
+            Playlist playlist = new Playlist();
+            playlist.GenreID = (genreID != null) ? genreID : 0;
+            playlist.Songs = playlist.CreatePlaylist(ofSongs, genreID).Result;
+            playlist.Name = (genreID != null) ? playlist.Songs[0].Genre : "Unknown";
+
+            await _context.Playlists.AddAsync(playlist);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtRoute("GetPlaylist", new { id = playlist.ID }, playlist);
+
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var playlist = await _context.Playlists.FindAsync(id);
+
+            if (playlist == null)
+            {
+                return NotFound();
+            }
+
+            List<Song> songs = await _context.Songs.Where(i => i.PlaylistID == id).ToListAsync();
+
+            foreach (Song song in songs)
+            {
+                _context.Songs.Remove(song);
+            }
+
+            _context.Playlists.Remove(playlist);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+    }
+    */
+
+
 }
