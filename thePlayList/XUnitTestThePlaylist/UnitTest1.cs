@@ -44,15 +44,15 @@ namespace XUnitTestThePlaylist
             }
         }
 
-        [Fact]
-        public async void CanEditUser()
-        {
-            DbContextOptions<MusicDbContext> options = new DbContextOptionsBuilder<MusicDbContext>()
-    .UseInMemoryDatabase("EditUserDB").Options;
-            using (MusicDbContext context = new MusicDbContext(options))
-            {
+    //    [Fact]
+    //    public async void CanEditUser()
+    //    {
+    //        DbContextOptions<MusicDbContext> options = new DbContextOptionsBuilder<MusicDbContext>()
+    //.UseInMemoryDatabase("EditUserDB").Options;
+    //        using (MusicDbContext context = new MusicDbContext(options))
+    //        {
                 
-            }
-        }
+    //        }
+    //    }
     }
 }

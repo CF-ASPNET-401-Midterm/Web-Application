@@ -14,7 +14,7 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-            <a class="navbar-brand" asp-action="Get" asp-controller="">The Playlist</a>
+            <a class="navbar-brand" asp-action="Index" asp-controller="Home">The Playlist</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -24,7 +24,7 @@
                         <a class="nav-link" asp-action="Info" asp-controller="User" asp-route-id="@Model.User.Id">My User Info</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" asp-action="Mylist" asp-controller="Playlist"><span class="sr-only">(current)</span>My Playlist</a>
+                        <a class="nav-link" asp-action="Mylist" asp-controller="Playlist" asp-route-id="@Model.User.Id"><span class="sr-only">(current)</span>My Playlist</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">About Us</a>
@@ -34,34 +34,40 @@
         </nav>
     </header>
     <main>
-        <div class="label">
-            <h2> My Playlist </h2>
-            <a asp-action="Edit" asp-controller="User" asp-route-id="@Model.User.Id">Edit Username </a>
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Songs[0].Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Songs[0].Artist)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Songs[0].Album)
-                    </th>
-                </tr>
-            </thead>
-            @foreach (var song in Model.Songs)
-            {
-                <tr>
-                    <td>@song.Name</td>
-                    <td>@song.Artist</td>
-                    <td>@song.Album</td>
-                </tr>
+        @*<div class="label">
+            <h2>@Html.DisplayNameFor(model => model.Playlists)</h2>
+        </div>*@
+        @foreach (var onePl in Model.Playlists)
+        {
+        <h4>
+            @Html.DisplayFor(modelItem => onePl.Name)       <a id="edit" asp-controller="Playlist" asp-action="Edit" asp-route-id="@Model.User.Id">Edit</a>
+                </h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(modelItem => onePl.Songs[0].Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(modelItem => onePl.Songs[0].Artist)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(modelItem => onePl.Songs[0].Album)
+                        </th>
+                    </tr>
+                </thead>
+                @foreach (var song in Model.Songs)
+                {
+                    <tr>
+                        <td>@song.Name</td>
+                        <td>@song.Artist</td>
+                        <td>@song.Album</td>
+                    </tr>
 
-            }
-        </table>
+                }
+            </table>
+        }
+        <a></a>
     </main>
     <!-- Bootstrap core JavaScript
     ================================================== -->

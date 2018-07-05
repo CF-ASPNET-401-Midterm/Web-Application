@@ -109,6 +109,42 @@ namespace thePlayList.Controllers
 
         */
 
+        [HttpGet]
+        public async Task<IActionResult> Mylist(int id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user != null)
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");
+
+                    var songResponse = client.GetAsync($"/api/playlist/{user.DatListEyeDee}").Result;
+
+                    if (songResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
+                    {
+                        var jsonDataSong = await songResponse.Content.ReadAsStringAsync();
+
+                        SongRoot rawAllSongs = JsonConvert.DeserializeObject<SongRoot>(jsonDataSong);
+
+                        var allSongs = from s in rawAllSongs.Songs
+                                       select s;
+
+                        //allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
+
+
+                        PlaylistViewModel mylistVM = new PlaylistViewModel();
+                        mylistVM.Songs = allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
+                        mylistVM.Playlists = _context.Playlists.Where(p => p.YouserEyeDee == user.Id).ToList();
+                        mylistVM.User = user;
+
+                        return View(mylistVM);
+                    }
+                }
+            }
+            return RedirectToAction("Get", "User");
+        }
+
         // replacing MyList method
         [HttpGet]
         public async Task<IActionResult> Get(int id)
@@ -149,7 +185,7 @@ namespace thePlayList.Controllers
                     mylistVM.Playlists = allPlaylists.Where(pl => pl.GenreID == user.DatGenreEyeDee).ToList();
                     mylistVM.User = user;
 
-                    return View(mylistVM);
+                    return RedirectToAction("Mylist", new { id = user.Id });
                 }
                 return NotFound();
             }
@@ -158,7 +194,7 @@ namespace thePlayList.Controllers
         // Grabbed these code from Usercontroller- NewUser method
         // Picking a playlist 
         [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Create(int id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             using (var client = new HttpClient())

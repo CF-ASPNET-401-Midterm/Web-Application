@@ -1,4 +1,4 @@
-﻿@model PlaylistViewModel
+﻿@model User
 
 
 
@@ -22,10 +22,10 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" asp-action="Get" asp-controller="User">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" asp-action="Get" asp-controller="User">My User Info <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" asp-action="Mylist" asp-controller="Playlist">My Playlist</a>
+                        <a class="nav-link" asp-action="Mylist" asp-controller="Playlist" asp-route-id="@Model.Id">My Playlist</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">About Us</a>
@@ -36,15 +36,16 @@
     </header>
 
     <main>
-        <h2> Change your User name </h2>
-
+        <h2> Change your user name </h2>
+        <br/>
+        <p>Current user name: @Model.Name</p>
         <form asp-form="Edit" method="Post">
-            <label asp-route-id="@Model.User.Id" name="newusername"> @Model.User.Name </label>
+            <label asp-route-id="@Model.Id" name="newusername"> New user name: </label>
             <input name="newusername" />
             <button type="submit"> Save Change </button>
         </form>
 
-        <a asp-action="Delete" asp-route-id="@Model.User.Id"> Delete This user </a>
+        <a asp-action="Delete" asp-route-id="@Model.Id"> Delete This user </a>
 
     </main>
     <!-- Bootstrap core JavaScript

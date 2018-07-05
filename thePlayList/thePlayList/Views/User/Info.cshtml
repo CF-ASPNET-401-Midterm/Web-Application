@@ -14,49 +14,51 @@
 
 <body>
     <header>
-        <nav class="nav justify-content-center">
-            <a asp-action="HOME" asp-controller="HOME" class="nav-link active"> HOME </a>
-            <a asp-action="API" asp-controller="API" class="nav-link"> API </a>
-            <a asp-action="About Us" asp-controller="About Us" class="nav-link"> About Us </a>
-            <a asp-action="Home" asp-controller=""> Log Out </a>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+            <a class="navbar-brand" asp-action="Get" asp-controller="">The Playlist</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-action="Info" asp-controller="User" asp-route-id="@Model.User.Id"><span class="sr-only">(current)</span>My User Info</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="Mylist" asp-controller="Playlist" asp-route-id="@Model.User.Id">My Playlist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About Us</a>
+                    </li>
+                </ul>
+            </div>
         </nav>
     </header>
-
-    <div class="detail-info">
-        <h4>Course</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                ID
-            </dt>
-            <dd>
-                @Model.User.Id
-            </dd>
-            <dt>
-                Name
-            </dt>
-            <dd>
-                @Model.User.Name
-            </dd>
-            <dt>
-                Genre ID:
-            </dt>
-            <dd>
-                @Model.User.DatGenreEyeDee
-            </dd>
-            <dt>
-                Course Term
-            </dt>
-            <dd>
-                @Model.User.DatListEyeDee
-            </dd>
-            <dt>
-                Students
-            </dt>
-        </dl>
-    </div>
-    <div class="options">
-        <a asp-action="Edit" asp-route-id="@Model.User.Id">Edit</a> |
-        <a asp-action="Index">Back to List</a>
-    </div>
+    <main>
+        <div class="detail-info">
+            <h4>User Info</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.User.Name)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.User.Name)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Playlists)
+                </dt>
+                @foreach (var item in Model.Playlists)
+                {
+                    <dd>
+                        <a asp-action="Mylist" asp-controller="Playlist" asp-route-id="@Model.User.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                    </dd>
+                }
+            </dl>
+        </div>
+        <div class="options">
+            <a asp-action="Edit" asp-route-id="@Model.User.Id">Edit</a> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </main>
 </body>

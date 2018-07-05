@@ -13,11 +13,14 @@ namespace thePlayList.Models
         [Required]
         public string Name { get; set; }
 
+
         public int DatListEyeDee { get; set; }
 
+        [Display(Name="Genre")]
         public int DatGenreEyeDee { get; set; }
 
         //public ListEnum DatGenre { get; set; }
+        //public Playlist Playlist { get; set; }
     }
 
     //public enum ListEnum
