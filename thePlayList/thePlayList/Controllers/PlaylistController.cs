@@ -111,7 +111,8 @@ namespace thePlayList.Controllers
                                    select s;
                     Playlist myPlaylist = allPlaylists.FirstOrDefault(p => p.Id == user.DatListEyeDee);
                     myPlaylist.YouserEyeDee = user.Id;
-                    //allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
+                    myPlaylist.Id = 0;
+
                     await _context.Playlists.AddAsync(myPlaylist);
                     await _context.SaveChangesAsync();
                     PlaylistViewModel mylistVM = new PlaylistViewModel();
@@ -142,6 +143,7 @@ namespace thePlayList.Controllers
 
                     PlaylistViewModel datPlaylistVM = new PlaylistViewModel();
                     datPlaylistVM.Playlists = rawAllPlaylists;
+                    datPlaylistVM.User = user;
 
                     return View(datPlaylistVM);
                 }
