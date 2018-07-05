@@ -1,0 +1,47 @@
+﻿[
+  {
+    "id": 432,
+    "name": "This One's for Me",
+    "artist": "Jonathan Clay",
+    "album": "This One's for Me",
+    "genre": "Blues",
+    "playlistID": 23,
+    "releaseDate": "2008-04-02T00:00:00"
+  },
+  {
+    "id": 433,
+    "name": "This two's for Me",
+    "artist": "Jonathan Clay",
+    "album": "This One's for Me",
+    "genre": "Blues",
+    "playlistID": 23,
+    "releaseDate": "2008-04-02T00:00:00"
+  },
+  {
+    "id": 434,
+    "name": "This Three's for Me",
+    "artist": "Jonathan Clay",
+    "album": "This One's for Me",
+    "genre": "Blues",
+    "playlistID": 23,
+    "releaseDate": "2008-04-02T00:00:00"
+  },
+  {
+    "id": 435,
+    "name": "This Four's for Me",
+    "artist": "Jonathan Clay",
+    "album": "This One's for Me",
+    "genre": "Blues",
+    "playlistID": 23,
+    "releaseDate": "2008-04-02T00:00:00"
+  },
+  {
+    "id": 436,
+    "name": "This Five's for Me",
+    "artist": "Jonathan Clay",
+    "album": "This One's for Me",
+    "genre": "Blues",
+    "playlistID": 23,
+    "releaseDate": "2008-04-02T00:00:00"
+  }
+]
