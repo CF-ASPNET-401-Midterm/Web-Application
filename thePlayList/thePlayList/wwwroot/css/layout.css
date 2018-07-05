@@ -4,7 +4,7 @@
     width: 100%;
 }*/
 
-/*nav bar*/
+/*nav bar
 nav {
     padding:0;
     width: 100%;
@@ -13,13 +13,13 @@ nav {
     opacity: 0.9;
     position: fixed;
     font-family: 'Markazi Text', serif;
-}
+}*/
 
 nav a {
-    margin: 0 5%;
+    /*margin: 0 5%;*/
     color: snow;
     font-size: 2em;
-    display:inline-block;
+    /*display:inline-block;*/
 }
 
 /*main {

@@ -21,6 +21,12 @@ namespace thePlayList.Controllers
             _context = context;
         }
 
+
+        public IActionResult Test()
+        {
+            return View();
+        }
+
         /// <summary>
         /// Login page once enter web application
         /// </summary>
@@ -50,7 +56,7 @@ namespace thePlayList.Controllers
                 return RedirectToAction("Edit", "Playlist", new { id = newuser.Id });
             }
 
-            if(user.DatListEyeDee == 0)
+            if (user.DatListEyeDee == 0)
             {
                 return RedirectToAction("Edit", "Playlist", new { id = user.Id });
             }
@@ -73,7 +79,7 @@ namespace thePlayList.Controllers
             var userCheck = _context.Users.FirstOrDefaultAsync(u => u.Name == newusername);
 
             // Return back to page if username already exist
-            if(userCheck != null)
+            if (userCheck != null)
             {
                 return View(user);
             }
@@ -151,6 +157,6 @@ namespace thePlayList.Controllers
         //        return NotFound();
         //    }
         //}
-       
+
     }
 }
