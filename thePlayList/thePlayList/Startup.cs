@@ -44,7 +44,7 @@ namespace thePlayList
            {
                routes.MapRoute(
                    name: "default",
-                   template: "{controller=User}/{action=Home}/{id?}");
+                   template: "{controller=User}/{action=Get}/{id?}");
            });
 
             app.UseStaticFiles();
