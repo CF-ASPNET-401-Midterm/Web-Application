@@ -36,28 +36,32 @@
     <main>
         <h3> Welcome! Please select your new playlist. </h3>
         <div>
+            <div class="btn-toolbar">
+                @foreach (var list in Model.Playlists)
+                {
+                    <form asp-action="Edit">
+                        <div class="form-group btn-form">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="@Model.User.Id" />
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="@Model.User.Name" />
+                            <div class="btn-group">
+                                <input asp-for="@Model.User.DatGenreEyeDee" class="form-control hide" value="@list.GenreID" />
+                            </div>
+                            <input type="submit" value="@list.Name" class="btn btn-secondary" />
+                        </div>
+                    </form>
 
-            <a class="btn btn-dark" id="custom-pl" asp-action="CreateCustomPlaylist" asp-controller="Playlist" asp-route-id="@Model.User.Id"> Create Custom Playlist</a>
-
-            @foreach (var list in Model.Playlists)
-            {
-                <form asp-action="Edit">
-                    <div class="form-group">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="@Model.User.Id" />
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="@Model.User.Name" />
-                        <input asp-for="@Model.User.DatGenreEyeDee" class="form-control hide" value="@list.GenreID" />
-                        <input type="submit" value="@list.Name" class="btn btn-secondary" />
-                    </div>
-                </form>
-
-            }
+                }
+            </div>
+            <div class="text-center">
+                <a class="btn btn-primary custom-btn" id="custom-pl" asp-action="CreateCustomPlaylist" asp-controller="Playlist" asp-route-id="@Model.User.Id"> Create Custom Playlist</a>
+            </div>
         </div>
     </main>
 
-    <footer class="py-5 bg-dark">
-        <div class="container">
+    <footer class="fixed-bottom py-5 bg-dark">
+        <div class="container"> 
             <p class="m-0 text-center text-white">Copyright &copy; The Playlist Bros 2018</p>
         </div>
     </footer>
@@ -68,4 +72,11 @@
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
             integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $("a.disabled").click(function () {
+                return false;
+            });
+        });
+    </script>
 </body>
