@@ -14,22 +14,24 @@ Scope (In/Out)
         Does not play music directly
 
 ## MVP
-- display a playlist based off of user searches by genre and/or time period
-- songs with title, artist, album, and time period displayed
-- Allow user to create an account (user name only, no password)
-- Allow existing users to log back in
+- display a playlist based off of user choice of genre
+- songs with title, artist, and album displayed
+- allow user to create an account (user name only, no password), edit, and delete an account
+- allow existing users to log back in and view their previously added playlist
 
 ## Stretch
+- Allow user to create a custom playlist
 - Responsive design
 - Allow a user to view other users
-- Pre-generated playlists saved to custom API
 - Display album artwork and artist description
 - Let users create and edit custom playlists
 - Allow a user to add new songs to database
-- Allow a user read access to another user's playlist
+- Allow a user to add another user's playlist to their own
 
 ## Functional Requirements
-We want to be able to control our database/API query so that we can generate customized playlists. We want to connect with the database so that we can a user name and their playlists. A user can search all of the songs in the database.
+We want to be able to control our database/API query so that we can 
+generate customized playlists. We want to connect to the front end database 
+so that we can save user names and their playlists.
 
 ## Non-Functional Requirements
 
