@@ -12,6 +12,7 @@ namespace thePlayList.Models
         public string Name { get; set; }
         public int GenreID { get; set; }
         public int YouserEyeDee { get; set; }
+        //public int ApiPlaylistId { get; set; }
         public List<Song> Songs { get; set; }
     }
 }

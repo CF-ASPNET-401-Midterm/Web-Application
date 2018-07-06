@@ -36,6 +36,7 @@
     <main>
         <h3> Welcome! Please select your new playlist. </h3>
         <div>
+            <a asp-action="CreateCustomPlaylist" asp-controller="Playlist" asp-route-id="@Model.User.Id"> Create Customed List</a>
             <img class="genre-img" />
             @foreach (var list in Model.Playlists)
             {
