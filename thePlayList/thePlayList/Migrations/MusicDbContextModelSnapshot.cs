@@ -54,7 +54,7 @@ namespace thePlayList.Migrations
 
                     b.Property<int?>("PlaylistId");
 
-                    b.Property<DateTime>("ReleaseDate");
+                    b.Property<DateTime?>("ReleaseDate");
 
                     b.HasKey("ID");
 

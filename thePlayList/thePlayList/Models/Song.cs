@@ -14,6 +14,6 @@ namespace thePlayList.Models
         public string Genre { get; set; }
         public int? PlaylistId { get; set; }
         public int DatListEyeDee { get; set; }
-        public DateTime ReleaseDate { get; set; }
+        public DateTime? ReleaseDate { get; set; }
     }
 }

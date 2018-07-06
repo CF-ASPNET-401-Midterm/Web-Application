@@ -39,7 +39,7 @@
                         <a class="nav-link" asp-action="Info" asp-controller="User" asp-route-id="@Model.Id">My User Info <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-action="Mylist" asp-controller="Playlist" asp-route-id="@Model.Id">My Playlist</a>
+                        <a class="nav-link" asp-action="Get" asp-controller="Playlist" asp-route-id="@Model.Id">My Playlist</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" asp-action="About" asp-controller="Home" asp-route-id="@Model.Id"><span class="sr-only">(current)</span>About Us</a>
@@ -94,7 +94,7 @@
     <!-- Footer -->
     <footer class="py-5 bg-dark">
         <div class="container">
-            <p class="m-0 text-center text-white">Copyright &copy; The Playlist Bros 2018</p>
+            <p class="m-0 text-center text-white">Copyright &copy; Playlist Bros 2018</p>
         </div>
         <!-- /.container -->
     </footer>
