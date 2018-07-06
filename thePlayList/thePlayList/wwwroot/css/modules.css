@@ -58,9 +58,9 @@ p.card-text {
     padding-top:10em;
 }*/
 
-.navbar-fixed-top {
+/*.navbar-fixed-top {
     display: block;
-}
+}*/
 
 .hide {
     display:none;
@@ -69,4 +69,20 @@ p.card-text {
 #edit {
     padding-left:2em;
     font-size:.75em;
+}
+
+#custom-pl {
+    margin:.5em 0;
+}
+
+.btn-form {
+    padding: .5em;
+}
+
+.custom-btn {
+    text-align: center;
+}
+
+.rounded-circle {
+    max-width:200px;
 }

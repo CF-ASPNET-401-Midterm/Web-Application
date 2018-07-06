@@ -58,6 +58,11 @@ namespace thePlayList.Controllers
         [HttpPost]
         public async Task<IActionResult> Get(string username)
         {
+            if (username == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var user = await _context.Users.FirstOrDefaultAsync(n => n.Name == username);
 
             if (user == null)
@@ -74,7 +79,7 @@ namespace thePlayList.Controllers
                 return RedirectToAction("Create", "Playlist", new { id = user.Id });
             }
 
-            return RedirectToAction("Mylist", "Playlist", new { id = user.Id });
+            return RedirectToAction("Get", "Playlist", new { id = user.Id });
         }
 
         // Edit username
@@ -118,64 +123,8 @@ namespace thePlayList.Controllers
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Get");
+            return RedirectToAction("Index", "Home");
         }
-
-        //[HttpGet]
-        //public async Task<IActionResult> NewUser(int id)
-        //{ 
-        //    var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-        //    using (var client = new HttpClient())
-        //    {
-        //        client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");
-
-        //        var plResponse = client.GetAsync("/api/playlist").Result;
-
-        //        if (plResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
-        //        {
-        //            var jsonDataPl = await plResponse.Content.ReadAsStringAsync();
-
-        //            List<Playlist> rawAllPlaylists = JsonConvert.DeserializeObject<List<Playlist>>(jsonDataPl);
-
-        //            var allPlaylists = from a in rawAllPlaylists
-        //                               select a;
-
-        //            ViewData["Playlists"] = rawAllPlaylists;
-        //            return View(user);
-        //        }
-        //    }
-        //    return RedirectToAction("Home");
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> NewUser(User user)
-        //{
-
-        //    using (var client = new HttpClient())
-        //    {
-        //        client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");
-
-        //        var plResponse = client.GetAsync("/api/playlist").Result;
-
-        //        if (plResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
-        //        {
-        //            var jsonDataPl = await plResponse.Content.ReadAsStringAsync();
-
-        //            List<Playlist> rawAllPlaylists = JsonConvert.DeserializeObject<List<Playlist>>(jsonDataPl);
-
-        //            var allPlaylists = from a in rawAllPlaylists
-        //                               select a;
-
-        //            PlaylistViewModel mylistVM = new PlaylistViewModel();
-        //            user.DatListEyeDee = allPlaylists.FirstOrDefault(pl => pl.GenreID == user.DatGenreEyeDee).Id;
-
-        //            _context.Users.Update(user);
-        //            await _context.SaveChangesAsync();
-        //            return RedirectToAction("Get", "Playlist", new { id = user.Id });
-        //        }
-        //        return NotFound();
-        //    }
-        //}
 
     }
 }

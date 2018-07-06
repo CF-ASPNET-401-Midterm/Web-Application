@@ -11,48 +11,60 @@
     <link rel="stylesheet" href="~/css/modules.css" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Markazi+Text" rel="stylesheet">
 </head>
-<header>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-        <a class="navbar-brand" href="#">The Playlist</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" asp-action="Get" asp-controller="User">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" asp-action="Mylist" asp-controller="Playlist">My Playlist</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About Us</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
 <body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+            <a class="navbar-brand" asp-action="Index" asp-controller="Home">The Playlist</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link disabled" asp-action="Info" asp-controller="User" asp-route-id="@Model.User.Id">My User Info</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link disabled" asp-action="Get" asp-controller="Playlist" asp-route-id="@Model.User.Id"><span class="sr-only">(current)</span>My Playlist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="About" asp-controller="Home" asp-route-id="@Model.User.Id">About Us</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
     <main>
         <h3> Welcome! Please select your new playlist. </h3>
         <div>
-            <img class="genre-img" />
-            @foreach (var list in Model.Playlists)
-            {
-                <form asp-action="Edit">
-                    <div class="form-group">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="@Model.User.Id" />
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="@Model.User.Name" />
-                        <input asp-for="@Model.User.DatGenreEyeDee" class="form-control hide" value="@list.GenreID" />
-                        <input type="submit" value="@list.Name" class="btn btn-default" />
-                    </div>
-                </form>
+            <div class="btn-toolbar">
+                @foreach (var list in Model.Playlists)
+                {
+                    <form asp-action="Edit">
+                        <div class="form-group btn-form">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="@Model.User.Id" />
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="@Model.User.Name" />
+                            <div class="btn-group">
+                                <input asp-for="@Model.User.DatGenreEyeDee" class="form-control hide" value="@list.GenreID" />
+                            </div>
+                            <input type="submit" value="@list.Name" class="btn btn-secondary" />
+                        </div>
+                    </form>
 
-            }
+                }
+            </div>
+            <div class="text-center">
+                <a class="btn btn-primary custom-btn" id="custom-pl" asp-action="CreateCustomPlaylist" asp-controller="Playlist" asp-route-id="@Model.User.Id"> Create Custom Playlist</a>
+            </div>
         </div>
     </main>
+
+    <footer class="fixed-bottom py-5 bg-dark">
+        <div class="container"> 
+            <p class="m-0 text-center text-white">Copyright &copy; The Playlist Bros 2018</p>
+        </div>
+    </footer>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -60,4 +72,11 @@
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
             integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $("a.disabled").click(function () {
+                return false;
+            });
+        });
+    </script>
 </body>

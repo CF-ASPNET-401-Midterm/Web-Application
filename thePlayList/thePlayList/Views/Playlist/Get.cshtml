@@ -24,10 +24,10 @@
                         <a class="nav-link" asp-action="Info" asp-controller="User" asp-route-id="@Model.User.Id">My User Info</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" asp-action="Mylist" asp-controller="Playlist" asp-route-id="@Model.User.Id"><span class="sr-only">(current)</span>My Playlist</a>
+                        <a class="nav-link" asp-action="Get" asp-controller="Playlist" asp-route-id="@Model.User.Id"><span class="sr-only">(current)</span>My Playlist</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About Us</a>
+                        <a class="nav-link" asp-action="About" asp-controller="Home" asp-route-id="@Model.User.Id">About Us</a>
                     </li>
                 </ul>
             </div>
@@ -35,13 +35,13 @@
     </header>
     <main>
         @*<div class="label">
-            <h2>@Html.DisplayNameFor(model => model.Playlists)</h2>
-        </div>*@
+                <h2>@Html.DisplayNameFor(model => model.Playlists)</h2>
+            </div>*@
         @foreach (var onePl in Model.Playlists)
         {
-        <h4>
-            @Html.DisplayFor(modelItem => onePl.Name)       <a id="edit" asp-controller="Playlist" asp-action="Edit" asp-route-id="@Model.User.Id">Edit</a>
-                </h4>
+            <h2>
+                My Playlist       @*<a id="edit" asp-controller="Playlist" asp-action="Edit" asp-route-id="@Model.User.Id">Edit</a>*@
+            </h2>
             <table class="table">
                 <thead>
                     <tr>
@@ -56,19 +56,40 @@
                         </th>
                     </tr>
                 </thead>
-                @foreach (var song in Model.Songs)
+                @if (@Model.ApiSongs != null)
                 {
-                    <tr>
-                        <td>@song.Name</td>
-                        <td>@song.Artist</td>
-                        <td>@song.Album</td>
-                    </tr>
-
+                    @foreach (var song in Model.ApiSongs)
+                    {
+                        <tr>
+                            <td>@song.Name</td>
+                            <td>@song.Artist</td>
+                            <td>@song.Album</td>
+                        </tr>
+                    }
+                }
+                @if (@Model.Songs != null)
+                {
+                    @foreach (var song in Model.Songs)
+                    {
+                        <tr>
+                            <td>@song.Name</td>
+                            <td>@song.Artist</td>
+                            <td>@song.Album</td>
+                        </tr>
+                    }
                 }
             </table>
         }
         <a></a>
     </main>
+    <!-- /.container -->
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Playlist Bros 2018</p>
+        </div>
+        <!-- /.container -->
+    </footer>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
