@@ -52,7 +52,7 @@ namespace XUnitTestThePlaylist
         }
 
         [Fact]
-        public void CanViewInfo()
+        public async void CanViewInfo()
         {
             DbContextOptions<MusicDbContext> options = new DbContextOptionsBuilder<MusicDbContext>()
     .UseInMemoryDatabase("ViewInfoDB").Options;
@@ -65,13 +65,16 @@ namespace XUnitTestThePlaylist
 
                 UserController testUC = new UserController(context);
 
+                await context.Users.AddAsync(testUser1);
+                await context.SaveChangesAsync();
+
                 // act
                 var result1 = testUC.Info(10);
                 var result2 = testUC.Info(555);
 
                 // Assert
-                Assert.Equal("RanToCompletion", result1.Status.ToString());
-                Assert.Equal("RanToCompletion", result2.Status.ToString());
+                Assert.IsType<ViewResult>(result1.Result);
+                Assert.IsType<RedirectToActionResult>(result2.Result);
             }
         }
 
