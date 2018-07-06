@@ -86,8 +86,8 @@ namespace XUnitTestThePlaylist
                 User testUser1 = new User();
                 testUser1.Id = 20;
                 testUser1.Name = "Bob";
-                testUser1.DatGenreEyeDee = 2;
-                testUser1.DatListEyeDee = 3;
+                testUser1.GenreID = 2;
+                testUser1.PlaylistID = 3;
 
                 await context.Users.AddAsync(testUser1);
                 await context.SaveChangesAsync();
@@ -102,8 +102,8 @@ namespace XUnitTestThePlaylist
 
                 var result2 = await testUC.Edit(20, "Bobby");
                 var getResult2 = context.Users.Where(u => u.Name == "Bobby");
-                var getResult3 = context.Users.Where(u => u.DatGenreEyeDee == 2);
-                var getResult4 = context.Users.Where(u => u.DatListEyeDee == 3);
+                var getResult3 = context.Users.Where(u => u.GenreID == 2);
+                var getResult4 = context.Users.Where(u => u.PlaylistID == 3);
 
                 Assert.Equal(0, getResult1.Count());
                 Assert.Equal(1, getResult2.Count());

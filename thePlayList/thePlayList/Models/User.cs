@@ -12,9 +12,9 @@ namespace thePlayList.Models
 
         [Required]
         public string Name { get; set; }
-        public int DatListEyeDee { get; set; }
+        public int PlaylistID { get; set; }
 
         [Display(Name="Genre")]
-        public int DatGenreEyeDee { get; set; }
+        public int GenreID { get; set; }
     }
 }

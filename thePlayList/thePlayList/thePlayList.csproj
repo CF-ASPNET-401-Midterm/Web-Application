@@ -21,9 +21,6 @@
     <Content Update="Views\Playlist\Create.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\User\NewUser.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
   </ItemGroup>
 
 </Project>
