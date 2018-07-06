@@ -1,6 +1,4 @@
-﻿@model User
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -36,13 +34,10 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" asp-action="Info" asp-controller="User" asp-route-id="@Model.Id">My User Info <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-action="Mylist" asp-controller="Playlist" asp-route-id="@Model.Id">My Playlist</a>
+                        <a class="nav-link" asp-action="Index" asp-controller="Home">Home</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" asp-action="About" asp-controller="Home" asp-route-id="@Model.Id"><span class="sr-only">(current)</span>About Us</a>
+                        <a class="nav-link" asp-action="AboutOut" asp-controller="Home"><span class="sr-only">(current)</span>About Us</a>
                     </li>
                 </ul>
             </div>

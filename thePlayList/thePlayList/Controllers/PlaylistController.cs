@@ -143,8 +143,7 @@ namespace thePlayList.Controllers
                     await _context.SaveChangesAsync();
 
                     PlaylistViewModel mylistVM = new PlaylistViewModel();
-                    mylistVM.Songs = myPlaylist.Songs;
-                    mylistVM.Songs = _context.Songs.Where(s => s.PlaylistId == user.DatListEyeDee).ToList();
+                    mylistVM.Songs = _context.Songs.Where(s => s.DatListEyeDee == user.DatListEyeDee).ToList();
                     mylistVM.Playlists = allPlaylists.Where(pl => pl.GenreID == user.DatGenreEyeDee).ToList();
                     mylistVM.User = user;
 
@@ -229,6 +228,12 @@ namespace thePlayList.Controllers
                 }
             }
             return RedirectToAction("Home");
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            return View();
         }
 
         [HttpPost]
