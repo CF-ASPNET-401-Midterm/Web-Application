@@ -112,7 +112,7 @@ namespace thePlayList.Controllers
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Mylist", "Playlist", new { id = user.Id });
+            return RedirectToAction("Get", "Playlist", new { id = user.Id });
         }
 
 
