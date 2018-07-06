@@ -34,13 +34,10 @@
         </nav>
     </header>
     <main>
-        @*<div class="label">
-                <h2>@Html.DisplayNameFor(model => model.Playlists)</h2>
-            </div>*@
         @foreach (var onePl in Model.Playlists)
         {
             <h2>
-                My Playlist       @*<a id="edit" asp-controller="Playlist" asp-action="Edit" asp-route-id="@Model.User.Id">Edit</a>*@
+                My Playlist      
             </h2>
             <table class="table">
                 <thead>

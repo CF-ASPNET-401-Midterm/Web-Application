@@ -31,6 +31,11 @@ namespace thePlayList.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Display detail on the user information
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Info(int id)
         {
@@ -58,13 +63,14 @@ namespace thePlayList.Controllers
         [HttpPost]
         public async Task<IActionResult> Get(string username)
         {
+            // condition if user name is taken
             if (username == null)
             {
                 return RedirectToAction("Index", "Home");
             }
 
             var user = await _context.Users.FirstOrDefaultAsync(n => n.Name == username);
-
+            // condition if its a new user
             if (user == null)
             {
                 User newuser = new User();
@@ -74,6 +80,7 @@ namespace thePlayList.Controllers
                 return RedirectToAction("Create", "Playlist", new { id = newuser.Id });
             }
 
+            // condition if user is selected, but playlist not selected
             if (user.DatListEyeDee == 0)
             {
                 return RedirectToAction("Create", "Playlist", new { id = user.Id });
@@ -82,7 +89,11 @@ namespace thePlayList.Controllers
             return RedirectToAction("Get", "Playlist", new { id = user.Id });
         }
 
-        // Edit username
+        /// <summary>
+        /// Updating name of user 
+        /// </summary>
+        /// <param name="id"> selected user id </param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -97,6 +108,12 @@ namespace thePlayList.Controllers
         }
 
 
+        /// <summary>
+        /// Update a new username.name
+        /// </summary>
+        /// <param name="id"> selected user id </param>
+        /// <param name="newusername"> user input with new username </param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Edit(int id, string newusername)
         {
@@ -116,7 +133,11 @@ namespace thePlayList.Controllers
         }
 
 
-        // Remove user account
+        /// <summary>
+        /// Remove user account
+        /// </summary>
+        /// <param name="id"> selected user id </param>
+        /// <returns></returns>
         public async Task<IActionResult> Delete(int id)
         {
             var user = _context.Users.Find(id);

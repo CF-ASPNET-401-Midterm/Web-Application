@@ -24,29 +24,13 @@
         <h3> Welcome select your new playlist! </h3>
         <div>
             <img class="genre-img" />
-            @*@foreach (var list in ViewData["Playlists"] as IList<Playlist>)
-                {
-                <form asp-action="Edit">
-                    <div class="form-group">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="Id" />
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="Name" />
-                        <input asp-for="DatGenreEyeDee" class="form-control hide" value="@list.GenreID" />
-                        <input type="submit" value="@list.Name" class="btn btn-default" />
-                    </div>
-                </form>*@
-
             @*}*@
         </div>
     </main>
-    <!-- /.container -->
-    <!-- Footer -->
     <footer class="py-5 bg-dark">
         <div class="container">
             <p class="m-0 text-center text-white">Copyright &copy; The Playlist Bros 2018</p>
         </div>
-        <!-- /.container -->
     </footer>
 </body>
 

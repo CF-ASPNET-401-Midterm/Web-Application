@@ -20,18 +20,24 @@ namespace thePlayList.Controllers
             _context = context;
         }
 
-        // replacing MyList method
+        /// <summary>
+        /// Displays list of songs on the main playlist page
+        /// </summary>
+        /// <param name="id"> selected user id </param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Get(int id)
         {
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
+            // Redirect if user has no selected playlist
             if (user.DatGenreEyeDee == 0 && user.DatListEyeDee == 0)
             {
                 return RedirectToAction("Create", new { id = user.Id });
             }
 
+            // Condition for first time user displaying default playlist 
             if (user.DatGenreEyeDee != 0)
             {
                 if (user.DatListEyeDee != 0)
@@ -59,7 +65,6 @@ namespace thePlayList.Controllers
                                            select s;
 
                             var myPlaylist = allPlaylists.FirstOrDefault(p => p.Id == user.DatListEyeDee);
-                            //var allSongs = allSongs.Where(s => s.PlaylistID == user.DatListEyeDee);
 
                             myPlaylist.YouserEyeDee = user.Id;
                             myPlaylist.Id = null;
@@ -75,6 +80,7 @@ namespace thePlayList.Controllers
                     }
                 }
 
+                // Condition for coming back default playlist user
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");
@@ -97,7 +103,6 @@ namespace thePlayList.Controllers
                                        select s;
 
                         var myPlaylist = allPlaylists.FirstOrDefault(p => p.YouserEyeDee == user.Id);
-                        //var allSongs = allSongs.Where(s => s.PlaylistID == user.DatListEyeDee);
 
                         myPlaylist.YouserEyeDee = user.Id;
                         myPlaylist.Id = null;
@@ -113,6 +118,7 @@ namespace thePlayList.Controllers
                 }
             }
 
+            // Condition for custom playlist user
             PlaylistViewModel plVM = new PlaylistViewModel();
             plVM.User = user;
             plVM.Playlists = _context.Playlists.Where(p => p.YouserEyeDee == user.Id).ToList();
@@ -121,7 +127,12 @@ namespace thePlayList.Controllers
             return View(plVM);
         }
 
-        // Creating custom playlist
+        
+        /// <summary>
+        /// Generating a custom playlist based on the picking the random songs
+        /// </summary>
+        /// <param name="id"> selected user ID </param>
+        /// <returns></returns>
         public async Task<IActionResult> CreateCustomPlaylist(int id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
@@ -138,34 +149,27 @@ namespace thePlayList.Controllers
                     var allSongs = from a in rawAllSongs
                                    select a;
 
-                    //All the songs from the api
+                    // Creating place holders of custom song.id
                     var sortedSongs = allSongs.ToList();
-                    //var sortedSongs = allSongs.OrderBy(s => s.ID).ToList();
                     List<int> idRef = new List<int>();
                     List<Song> customList = new List<Song>();
                     Playlist playlist = new Playlist();
-
 
                     playlist.YouserEyeDee = user.Id;
 
                     await _context.Playlists.AddAsync(playlist);
                     await _context.SaveChangesAsync();
 
-                    //the user's list id = playlist id that was just saved
                     user.DatListEyeDee = playlist.Id.Value;
 
 
                     _context.Users.Update(user);
                     await _context.SaveChangesAsync();
 
-                    // at this point there a playlist saved
-
-                    // updaed the user wit hteh new playlist id
-
                     for (int i = 0; i < 24; i++)
                     {
+                        // Picking random songs
                         Random rdm = new Random();
-                        //int idX = rdm.Next(sortedSongs.Count());
                         int idX = rdm.Next(0, sortedSongs.Count());
                         if (!idRef.Contains(idX))
                         {
@@ -173,20 +177,18 @@ namespace thePlayList.Controllers
 
                             if (apiSong != null)
                             {
+                                // Moving ApiSong objec to Song object to save onto db
                                 idRef.Add(idX);
                                 Song newsong = new Song();
                                 newsong.Name = apiSong.Name;
 
                                 newsong.PlaylistId = user.DatListEyeDee;
                                 newsong.DatListEyeDee = user.DatListEyeDee;
-                                //newsong.DatListEyeDee = apiSong.PlaylistID;
-
 
                                 newsong.ReleaseDate = apiSong.ReleaseDate;
                                 newsong.Album = apiSong.Album;
                                 newsong.Artist = apiSong.Artist;
                                 newsong.Genre = apiSong.Genre;
-                                //customList.Add(newsong);
                                 await _context.Songs.AddAsync(newsong);
                                 await _context.SaveChangesAsync();
                             }
@@ -200,19 +202,18 @@ namespace thePlayList.Controllers
                             i--;
                         }
                     }
-                    //playlist.YouserEyeDee = user.Id;
-                    //user.DatListEyeDee = playlist.Id.Value;
-                    //await _context.Users.AddAsync(user);
-                    //await _context.Playlists.AddAsync(playlist);
-                    //await _context.SaveChangesAsync();
                     return RedirectToAction("Get", "Playlist", new { id = user.Id });
                 }
                 return NotFound();
             }
         }
 
-        // Grabbed these code from Usercontroller- NewUser method
-        // Picking a playlist 
+        
+        /// <summary>
+        /// Dynamically generating genre button based on the API 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Create(int id)
         {
@@ -229,9 +230,6 @@ namespace thePlayList.Controllers
 
                     List<Playlist> rawAllPlaylists = JsonConvert.DeserializeObject<List<Playlist>>(jsonDataPl);
 
-                    //var allPlaylists = from a in rawAllPlaylists
-                    //                   select a;
-
                     PlaylistViewModel plVM = new PlaylistViewModel();
                     plVM.Playlists = rawAllPlaylists;
                     plVM.User = user;
@@ -242,12 +240,22 @@ namespace thePlayList.Controllers
             return RedirectToAction("Home");
         }
 
+        /// <summary>
+        /// Displaying Edit page of playlist
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Edit(int id)
         {
             return View();
         }
 
+        /// <summary>
+        /// Update the playlist 
+        /// </summary>
+        /// <param name="user"> Selected user object </param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Edit(User user)
         {
@@ -277,7 +285,11 @@ namespace thePlayList.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Playlist delete function 
+        /// </summary>
+        /// <param name="userId"> Selected user id </param>
+        /// <returns></returns>
         public async Task<IActionResult> Delete(int userId)
         {
             var user = _context.Users.Find(userId);
@@ -285,6 +297,7 @@ namespace thePlayList.Controllers
             user.DatGenreEyeDee = 0;
             user.DatListEyeDee = 0;
 
+            // update user information after removing a playlist
             _context.Users.Update(user);
             _context.Playlists.Remove(playlist);
             await _context.SaveChangesAsync();

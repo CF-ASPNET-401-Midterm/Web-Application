@@ -42,19 +42,6 @@
                 <dd>
                     @Html.DisplayFor(model => model.User.Name)
                 </dd>
-                @*@if (Model.Playlists != null)
-                {
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Playlists)
-                    </dt>
-
-                    @foreach (var item in Model.Playlists)
-                    {
-                        <dd>
-                            <a asp-action="Mylist" asp-controller="Playlist" asp-route-id="@Model.User.Id">@Html.DisplayFor(modelItem => item.Name)</a>
-                        </dd>
-                    }
-                }*@
             </dl>
         </div>
         <div class="options">
