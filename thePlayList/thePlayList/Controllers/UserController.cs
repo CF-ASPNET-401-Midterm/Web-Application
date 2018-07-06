@@ -42,7 +42,7 @@ namespace thePlayList.Controllers
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user != null)
             {
-                var rawPlaylist = _context.Playlists.Where(p => p.YouserEyeDee == user.Id).ToList();
+                var rawPlaylist = _context.Playlists.Where(p => p.UserID == user.Id).ToList();
 
                 PlaylistViewModel plVM = new PlaylistViewModel();
                 plVM.Playlists = rawPlaylist;

@@ -66,7 +66,7 @@ namespace thePlayList.Controllers
 
                             var myPlaylist = allPlaylists.FirstOrDefault(p => p.Id == user.DatListEyeDee);
 
-                            myPlaylist.YouserEyeDee = user.Id;
+                            myPlaylist.UserID = user.Id;
                             myPlaylist.Id = null;
                             allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
 
@@ -102,9 +102,9 @@ namespace thePlayList.Controllers
                         var allSongs = from s in rawAllSongs
                                        select s;
 
-                        var myPlaylist = allPlaylists.FirstOrDefault(p => p.YouserEyeDee == user.Id);
+                        var myPlaylist = allPlaylists.FirstOrDefault(p => p.UserID == user.Id);
 
-                        myPlaylist.YouserEyeDee = user.Id;
+                        myPlaylist.UserID = user.Id;
                         myPlaylist.Id = null;
                         allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
 
@@ -121,8 +121,8 @@ namespace thePlayList.Controllers
             // Condition for custom playlist user
             PlaylistViewModel plVM = new PlaylistViewModel();
             plVM.User = user;
-            plVM.Playlists = _context.Playlists.Where(p => p.YouserEyeDee == user.Id).ToList();
-            plVM.Songs = _context.Songs.Where(p => p.DatListEyeDee == user.DatListEyeDee).ToList();
+            plVM.Playlists = _context.Playlists.Where(p => p.UserID == user.Id).ToList();
+            plVM.Songs = _context.Songs.Where(p => p.OurListId == user.DatListEyeDee).ToList();
 
             return View(plVM);
         }
@@ -155,7 +155,7 @@ namespace thePlayList.Controllers
                     List<Song> customList = new List<Song>();
                     Playlist playlist = new Playlist();
 
-                    playlist.YouserEyeDee = user.Id;
+                    playlist.UserID = user.Id;
 
                     await _context.Playlists.AddAsync(playlist);
                     await _context.SaveChangesAsync();
@@ -182,8 +182,8 @@ namespace thePlayList.Controllers
                                 Song newsong = new Song();
                                 newsong.Name = apiSong.Name;
 
-                                newsong.PlaylistId = user.DatListEyeDee;
-                                newsong.DatListEyeDee = user.DatListEyeDee;
+                                newsong.ApiListId = user.DatListEyeDee;
+                                newsong.OurListId = user.DatListEyeDee;
 
                                 newsong.ReleaseDate = apiSong.ReleaseDate;
                                 newsong.Album = apiSong.Album;
