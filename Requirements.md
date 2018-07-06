@@ -14,10 +14,10 @@ Scope (In/Out)
         Does not play music directly
 
 ## MVP
-- display a playlist based off of user choice of genre
-- songs with title, artist, and album displayed
-- allow user to create an account (user name only, no password), edit, and delete an account
-- allow existing users to log back in and view their previously added playlist
+- Display a playlist based off of user choice of genre
+- Songs with title, artist, and album displayed
+- Allow user to create an account (user name only, no password), edit, and delete an account
+- Allow existing users to log back in and view their previously added playlist
 
 ## Stretch
 - Allow user to create a custom playlist
