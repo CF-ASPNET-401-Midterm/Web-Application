@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace thePlayList.Migrations
 {
-    public partial class initial2 : Migration
+    public partial class test2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -50,7 +50,7 @@ namespace thePlayList.Migrations
                     Genre = table.Column<string>(nullable: true),
                     PlaylistId = table.Column<int>(nullable: true),
                     DatListEyeDee = table.Column<int>(nullable: false),
-                    ReleaseDate = table.Column<DateTime>(nullable: false)
+                    ReleaseDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {

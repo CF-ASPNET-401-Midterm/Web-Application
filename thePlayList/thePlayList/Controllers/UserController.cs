@@ -58,6 +58,11 @@ namespace thePlayList.Controllers
         [HttpPost]
         public async Task<IActionResult> Get(string username)
         {
+            if (username == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var user = await _context.Users.FirstOrDefaultAsync(n => n.Name == username);
 
             if (user == null)
@@ -74,7 +79,7 @@ namespace thePlayList.Controllers
                 return RedirectToAction("Create", "Playlist", new { id = user.Id });
             }
 
-            return RedirectToAction("Mylist", "Playlist", new { id = user.Id });
+            return RedirectToAction("Get", "Playlist", new { id = user.Id });
         }
 
         // Edit username
@@ -118,7 +123,7 @@ namespace thePlayList.Controllers
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Get");
+            return RedirectToAction("Index", "Home");
         }
 
         //[HttpGet]

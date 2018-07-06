@@ -10,8 +10,8 @@ using thePlayList.Data;
 namespace thePlayList.Migrations
 {
     [DbContext(typeof(MusicDbContext))]
-    [Migration("20180706005753_initial2")]
-    partial class initial2
+    [Migration("20180706033856_test2")]
+    partial class test2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,7 +56,7 @@ namespace thePlayList.Migrations
 
                     b.Property<int?>("PlaylistId");
 
-                    b.Property<DateTime>("ReleaseDate");
+                    b.Property<DateTime?>("ReleaseDate");
 
                     b.HasKey("ID");
 
