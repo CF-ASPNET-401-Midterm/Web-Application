@@ -153,7 +153,6 @@ namespace XUnitTestThePlaylist
             {
                 //Arrange
                 User testUser1 = new User();
-                //testUser1.Id = 40;
                 testUser1.Name = "Bob";
                 testUser1.GenreID = 2;
                 testUser1.PlaylistID = 3;
@@ -162,7 +161,6 @@ namespace XUnitTestThePlaylist
                 await context.SaveChangesAsync();
 
                 var dbTestUser = await context.Users.FirstOrDefaultAsync(u => u.Name == "Bob");
-                //dbTestUser.Id = 50;
                 dbTestUser.Name = "Bobby Brown";
                 dbTestUser.GenreID = 4;
                 dbTestUser.PlaylistID = 5;
@@ -170,10 +168,7 @@ namespace XUnitTestThePlaylist
                 context.Update(dbTestUser);
                 await context.SaveChangesAsync();
 
-                //var result1 = await context.Users.FirstOrDefaultAsync(u => u.Id == 30);
                 var result1 = context.Users.Where(u => u.Name == "Bobby Brown");
-                //var result3 = context.Users.Where(u => u.GenreID == 4);
-                //var result4 = context.Users.Where(u => u.PlaylistID == 4);
                 var result2 = context.Users.Where(u => u.Name == "Bob");
 
                 Assert.NotNull(result1);

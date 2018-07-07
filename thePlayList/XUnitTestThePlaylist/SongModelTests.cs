@@ -22,7 +22,6 @@ namespace XUnitTestThePlaylist
             {
                 //Arrange
                 Song testSong1 = new Song();
-                //testUser1.Id = 40;
                 testSong1.Name = "Gonna Give You Up";
                 testSong1.Artist = "Slick Rick";
                 testSong1.Genre = "oldies";
@@ -33,7 +32,6 @@ namespace XUnitTestThePlaylist
                 await context.SaveChangesAsync();
 
                 var dbTestSong = await context.Songs.FirstOrDefaultAsync(u => u.Name == "Gonna Give You Up");
-                //dbTestUser.Id = 50;
                 dbTestSong.Name = "Never Gonna Give You Up";
                 testSong1.Artist = "Rick Astley";
                 testSong1.Genre = "memerific oldies";
@@ -43,7 +41,6 @@ namespace XUnitTestThePlaylist
                 context.Update(dbTestSong);
                 await context.SaveChangesAsync();
 
-                //var result1 = await context.Users.FirstOrDefaultAsync(u => u.Id == 30);
                 var result1 = await context.Songs.FirstOrDefaultAsync(s => s.Artist == "Rick Astley");
                 var result2 = context.Songs.Where(s => s.Artist == "Slick Rick");
 
