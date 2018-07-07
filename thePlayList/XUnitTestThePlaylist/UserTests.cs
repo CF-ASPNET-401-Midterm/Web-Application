@@ -52,7 +52,7 @@ namespace XUnitTestThePlaylist
         }
 
         [Fact]
-        public void CanViewInfo()
+        public async void CanViewInfo()
         {
             DbContextOptions<MusicDbContext> options = new DbContextOptionsBuilder<MusicDbContext>()
     .UseInMemoryDatabase("ViewInfoDB").Options;
@@ -65,13 +65,16 @@ namespace XUnitTestThePlaylist
 
                 UserController testUC = new UserController(context);
 
+                await context.Users.AddAsync(testUser1);
+                await context.SaveChangesAsync();
+
                 // act
                 var result1 = testUC.Info(10);
                 var result2 = testUC.Info(555);
 
                 // Assert
-                Assert.Equal("RanToCompletion", result1.Status.ToString());
-                Assert.Equal("RanToCompletion", result2.Status.ToString());
+                Assert.IsType<ViewResult>(result1.Result);
+                Assert.IsType<RedirectToActionResult>(result2.Result);
             }
         }
 
@@ -86,8 +89,8 @@ namespace XUnitTestThePlaylist
                 User testUser1 = new User();
                 testUser1.Id = 20;
                 testUser1.Name = "Bob";
-                testUser1.DatGenreEyeDee = 2;
-                testUser1.DatListEyeDee = 3;
+                testUser1.GenreID = 2;
+                testUser1.PlaylistID = 3;
 
                 await context.Users.AddAsync(testUser1);
                 await context.SaveChangesAsync();
@@ -102,8 +105,8 @@ namespace XUnitTestThePlaylist
 
                 var result2 = await testUC.Edit(20, "Bobby");
                 var getResult2 = context.Users.Where(u => u.Name == "Bobby");
-                var getResult3 = context.Users.Where(u => u.DatGenreEyeDee == 2);
-                var getResult4 = context.Users.Where(u => u.DatListEyeDee == 3);
+                var getResult3 = context.Users.Where(u => u.GenreID == 2);
+                var getResult4 = context.Users.Where(u => u.PlaylistID == 3);
 
                 Assert.Equal(0, getResult1.Count());
                 Assert.Equal(1, getResult2.Count());
@@ -138,6 +141,41 @@ namespace XUnitTestThePlaylist
                 var result2 = await testUC.Delete(30);
 
                 Assert.Equal(0, getResult1.Count());
+            }
+        }
+
+        [Fact]
+        public async void UserGetterandSetters()
+        {
+            DbContextOptions<MusicDbContext> options = new DbContextOptionsBuilder<MusicDbContext>()
+.UseInMemoryDatabase("GetterSetterUserDB").Options;
+            using (MusicDbContext context = new MusicDbContext(options))
+            {
+                //Arrange
+                User testUser1 = new User();
+                testUser1.Name = "Bob";
+                testUser1.GenreID = 2;
+                testUser1.PlaylistID = 3;
+
+                await context.Users.AddAsync(testUser1);
+                await context.SaveChangesAsync();
+
+                var dbTestUser = await context.Users.FirstOrDefaultAsync(u => u.Name == "Bob");
+                dbTestUser.Name = "Bobby Brown";
+                dbTestUser.GenreID = 4;
+                dbTestUser.PlaylistID = 5;
+
+                context.Update(dbTestUser);
+                await context.SaveChangesAsync();
+
+                var result1 = context.Users.Where(u => u.Name == "Bobby Brown");
+                var result2 = context.Users.Where(u => u.Name == "Bob");
+
+                Assert.NotNull(result1);
+                Assert.Equal(0, result2.Count());
+                Assert.Equal("Bobby Brown", dbTestUser.Name);
+                Assert.Equal(4, dbTestUser.GenreID);
+                Assert.Equal(5, dbTestUser.PlaylistID);
             }
         }
     }

@@ -32,22 +32,22 @@ namespace thePlayList.Controllers
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
             // Redirect if user has no selected playlist
-            if (user.DatGenreEyeDee == 0 && user.DatListEyeDee == 0)
+            if (user.GenreID == 0 && user.PlaylistID == 0)
             {
                 return RedirectToAction("Create", new { id = user.Id });
             }
 
             // Condition for first time user displaying default playlist 
-            if (user.DatGenreEyeDee != 0)
+            if (user.GenreID != 0)
             {
-                if (user.DatListEyeDee != 0)
+                if (user.PlaylistID != 0)
                 {
                     using (var client = new HttpClient())
                     {
                         client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");
 
                         var playlistResponse = client.GetAsync("/api/playlist").Result;
-                        var songResponse = client.GetAsync($"/api/playlist/{user.DatListEyeDee}").Result;
+                        var songResponse = client.GetAsync($"/api/playlist/{user.PlaylistID}").Result;
 
                         if (playlistResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
                         {
@@ -64,15 +64,15 @@ namespace thePlayList.Controllers
                             var allSongs = from s in rawAllSongs.Songs
                                            select s;
 
-                            var myPlaylist = allPlaylists.FirstOrDefault(p => p.Id == user.DatListEyeDee);
+                            var myPlaylist = allPlaylists.FirstOrDefault(p => p.Id == user.PlaylistID);
 
                             myPlaylist.UserID = user.Id;
                             myPlaylist.Id = null;
-                            allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
+                            allSongs.Where(s => s.PlaylistID == user.PlaylistID).ToList();
 
                             PlaylistViewModel mylistVM = new PlaylistViewModel();
-                            mylistVM.ApiSongs = allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
-                            mylistVM.Playlists = allPlaylists.Where(pl => pl.GenreID == user.DatGenreEyeDee).ToList();
+                            mylistVM.ApiSongs = allSongs.Where(s => s.PlaylistID == user.PlaylistID).ToList();
+                            mylistVM.Playlists = allPlaylists.Where(pl => pl.GenreID == user.GenreID).ToList();
                             mylistVM.User = user;
 
                             return View(mylistVM);
@@ -86,7 +86,7 @@ namespace thePlayList.Controllers
                     client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");
 
                     var playlistResponse = client.GetAsync("/api/playlist").Result;
-                    var songResponse = client.GetAsync($"/api/playlist/{user.DatListEyeDee}").Result;
+                    var songResponse = client.GetAsync($"/api/playlist/{user.PlaylistID}").Result;
 
                     if (playlistResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
                     {
@@ -106,11 +106,11 @@ namespace thePlayList.Controllers
 
                         myPlaylist.UserID = user.Id;
                         myPlaylist.Id = null;
-                        allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
+                        allSongs.Where(s => s.PlaylistID == user.PlaylistID).ToList();
 
                         PlaylistViewModel mylistVM = new PlaylistViewModel();
-                        mylistVM.ApiSongs = allSongs.Where(s => s.PlaylistID == user.DatListEyeDee).ToList();
-                        mylistVM.Playlists = allPlaylists.Where(pl => pl.GenreID == user.DatGenreEyeDee).ToList();
+                        mylistVM.ApiSongs = allSongs.Where(s => s.PlaylistID == user.PlaylistID).ToList();
+                        mylistVM.Playlists = allPlaylists.Where(pl => pl.GenreID == user.GenreID).ToList();
                         mylistVM.User = user;
 
                         return View(mylistVM);
@@ -122,7 +122,7 @@ namespace thePlayList.Controllers
             PlaylistViewModel plVM = new PlaylistViewModel();
             plVM.User = user;
             plVM.Playlists = _context.Playlists.Where(p => p.UserID == user.Id).ToList();
-            plVM.Songs = _context.Songs.Where(p => p.OurListId == user.DatListEyeDee).ToList();
+            plVM.Songs = _context.Songs.Where(p => p.OurListId == user.PlaylistID).ToList();
 
             return View(plVM);
         }
@@ -160,7 +160,7 @@ namespace thePlayList.Controllers
                     await _context.Playlists.AddAsync(playlist);
                     await _context.SaveChangesAsync();
 
-                    user.DatListEyeDee = playlist.Id.Value;
+                    user.PlaylistID = playlist.Id.Value;
 
 
                     _context.Users.Update(user);
@@ -182,8 +182,8 @@ namespace thePlayList.Controllers
                                 Song newsong = new Song();
                                 newsong.Name = apiSong.Name;
 
-                                newsong.ApiListId = user.DatListEyeDee;
-                                newsong.OurListId = user.DatListEyeDee;
+                                newsong.ApiListId = user.PlaylistID;
+                                newsong.OurListId = user.PlaylistID;
 
                                 newsong.ReleaseDate = apiSong.ReleaseDate;
                                 newsong.Album = apiSong.Album;
@@ -275,7 +275,7 @@ namespace thePlayList.Controllers
                                        select a;
 
                     PlaylistViewModel mylistVM = new PlaylistViewModel();
-                    user.DatListEyeDee = allPlaylists.FirstOrDefault(pl => pl.GenreID == user.DatGenreEyeDee).Id.Value;
+                    user.PlaylistID = allPlaylists.FirstOrDefault(pl => pl.GenreID == user.GenreID).Id.Value;
 
                     _context.Users.Update(user);
                     await _context.SaveChangesAsync();
@@ -293,9 +293,9 @@ namespace thePlayList.Controllers
         public async Task<IActionResult> Delete(int userId)
         {
             var user = _context.Users.Find(userId);
-            var playlist = _context.Playlists.Find(user.DatListEyeDee);
-            user.DatGenreEyeDee = 0;
-            user.DatListEyeDee = 0;
+            var playlist = _context.Playlists.Find(user.PlaylistID);
+            user.GenreID = 0;
+            user.PlaylistID = 0;
 
             // update user information after removing a playlist
             _context.Users.Update(user);

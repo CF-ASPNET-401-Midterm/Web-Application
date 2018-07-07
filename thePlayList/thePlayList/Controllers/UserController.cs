@@ -81,7 +81,7 @@ namespace thePlayList.Controllers
             }
 
             // condition if user is selected, but playlist not selected
-            if (user.DatListEyeDee == 0)
+            if (user.PlaylistID == 0)
             {
                 return RedirectToAction("Create", "Playlist", new { id = user.Id });
             }
