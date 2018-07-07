@@ -143,5 +143,45 @@ namespace XUnitTestThePlaylist
                 Assert.Equal(0, getResult1.Count());
             }
         }
+
+        [Fact]
+        public async void UserGetterandSetters()
+        {
+            DbContextOptions<MusicDbContext> options = new DbContextOptionsBuilder<MusicDbContext>()
+.UseInMemoryDatabase("GetterSetterUserDB").Options;
+            using (MusicDbContext context = new MusicDbContext(options))
+            {
+                //Arrange
+                User testUser1 = new User();
+                //testUser1.Id = 40;
+                testUser1.Name = "Bob";
+                testUser1.GenreID = 2;
+                testUser1.PlaylistID = 3;
+
+                await context.Users.AddAsync(testUser1);
+                await context.SaveChangesAsync();
+
+                var dbTestUser = await context.Users.FirstOrDefaultAsync(u => u.Name == "Bob");
+                //dbTestUser.Id = 50;
+                dbTestUser.Name = "Bobby Brown";
+                dbTestUser.GenreID = 4;
+                dbTestUser.PlaylistID = 5;
+
+                context.Update(dbTestUser);
+                await context.SaveChangesAsync();
+
+                //var result1 = await context.Users.FirstOrDefaultAsync(u => u.Id == 30);
+                var result1 = context.Users.Where(u => u.Name == "Bobby Brown");
+                //var result3 = context.Users.Where(u => u.GenreID == 4);
+                //var result4 = context.Users.Where(u => u.PlaylistID == 4);
+                var result2 = context.Users.Where(u => u.Name == "Bob");
+
+                Assert.NotNull(result1);
+                Assert.Equal(0, result2.Count());
+                Assert.Equal("Bobby Brown", dbTestUser.Name);
+                Assert.Equal(4, dbTestUser.GenreID);
+                Assert.Equal(5, dbTestUser.PlaylistID);
+            }
+        }
     }
 }
