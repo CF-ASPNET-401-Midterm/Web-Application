@@ -39,7 +39,7 @@ namespace XUnitTestThePlaylist
                 testSong1.Genre = "memerific oldies";
                 testSong1.ApiListId = 34;
                 testSong1.OurListId = 2;
-
+                testSong1.ReleaseDate = new DateTime(2009, 09, 3, 14, 8, 5, 123);
                 context.Update(dbTestSong);
                 await context.SaveChangesAsync();
 
@@ -53,6 +53,7 @@ namespace XUnitTestThePlaylist
                 Assert.Equal("memerific oldies", result1.Genre);
                 Assert.Equal(34, result1.ApiListId);
                 Assert.Equal(2, result1.OurListId);
+                Assert.Equal(new DateTime(2009, 09, 3, 14, 8, 5, 123), result1.ReleaseDate);
             }
         }
     }
