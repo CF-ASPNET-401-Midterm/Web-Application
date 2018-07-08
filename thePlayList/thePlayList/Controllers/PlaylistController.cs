@@ -37,11 +37,12 @@ namespace thePlayList.Controllers
                 return RedirectToAction("Create", new { id = user.Id });
             }
 
-            // Condition for first time user displaying default playlist 
+           
             if (user.GenreID != 0)
             {
                 if (user.PlaylistID != 0)
                 {
+                    // Condition for coming back default playlist user
                     using (var client = new HttpClient())
                     {
                         client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");
@@ -80,32 +81,39 @@ namespace thePlayList.Controllers
                     }
                 }
 
-                // Condition for coming back default playlist user
+                // Condition for first time user displaying default playlist 
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri("http://musicparserapi.azurewebsites.net");
 
                     var playlistResponse = client.GetAsync("/api/playlist").Result;
-                    var songResponse = client.GetAsync($"/api/playlist/{user.PlaylistID}").Result;
 
                     if (playlistResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
                     {
                         var jsonDatapl = await playlistResponse.Content.ReadAsStringAsync();
-                        var jsonDataSong = await songResponse.Content.ReadAsStringAsync();
 
                         List<Playlist> rawAllList = JsonConvert.DeserializeObject<List<Playlist>>(jsonDatapl);
-                        List<ApiSong> rawAllSongs = JsonConvert.DeserializeObject<List<ApiSong>>(jsonDataSong);
 
                         var allPlaylists = from a in rawAllList
                                            select a;
 
-                        var allSongs = from s in rawAllSongs
+                        var myPlaylist = allPlaylists.FirstOrDefault(p => p.GenreID == user.GenreID);
+                        myPlaylist.UserID = user.Id;
+                        user.PlaylistID = myPlaylist.Id.Value;
+
+                        myPlaylist.Id = null;
+
+                        // Once playlist gets assigned to user, request songs from api using playlist id
+                        var songResponse = client.GetAsync($"/api/playlist/{user.PlaylistID}").Result;
+                        if (!songResponse.EnsureSuccessStatusCode().IsSuccessStatusCode)
+                        {
+                            return NotFound();
+                        }
+                        var jsonDataSong = await songResponse.Content.ReadAsStringAsync();
+                        SongRoot rawAllSongs = JsonConvert.DeserializeObject<SongRoot>(jsonDataSong);
+                        var allSongs = from s in rawAllSongs.Songs
                                        select s;
 
-                        var myPlaylist = allPlaylists.FirstOrDefault(p => p.UserID == user.Id);
-
-                        myPlaylist.UserID = user.Id;
-                        myPlaylist.Id = null;
                         allSongs.Where(s => s.PlaylistID == user.PlaylistID).ToList();
 
                         PlaylistViewModel mylistVM = new PlaylistViewModel();
@@ -127,13 +135,13 @@ namespace thePlayList.Controllers
             return View(plVM);
         }
 
-        
-        /// <summary>
-        /// Generating a custom playlist based on the picking the random songs
-        /// </summary>
-        /// <param name="id"> selected user ID </param>
-        /// <returns></returns>
-        public async Task<IActionResult> CreateCustomPlaylist(int id)
+
+            /// <summary>
+            /// Generating a custom playlist based on the picking the random songs
+            /// </summary>
+            /// <param name="id"> selected user ID </param>
+            /// <returns></returns>
+            public async Task<IActionResult> CreateCustomPlaylist(int id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             using (var client = new HttpClient())
@@ -166,9 +174,9 @@ namespace thePlayList.Controllers
                     _context.Users.Update(user);
                     await _context.SaveChangesAsync();
 
+                    // Picking random 25 songs from the song list
                     for (int i = 0; i < 24; i++)
                     {
-                        // Picking random songs
                         Random rdm = new Random();
                         int idX = rdm.Next(0, sortedSongs.Count());
                         if (!idRef.Contains(idX))
@@ -192,6 +200,7 @@ namespace thePlayList.Controllers
                                 await _context.Songs.AddAsync(newsong);
                                 await _context.SaveChangesAsync();
                             }
+                            // if condition is not applied, minus one from i to repeat the process
                             else
                             {
                                 i--;
@@ -210,7 +219,7 @@ namespace thePlayList.Controllers
 
         
         /// <summary>
-        /// Dynamically generating genre button based on the API 
+        /// Findes selected users playlist from API and load onto view through View Model
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -288,11 +297,11 @@ namespace thePlayList.Controllers
         /// <summary>
         /// Playlist delete function 
         /// </summary>
-        /// <param name="userId"> Selected user id </param>
+        /// <param name="id"> Selected user id </param>
         /// <returns></returns>
-        public async Task<IActionResult> Delete(int userId)
+        public async Task<IActionResult> Delete(int id)
         {
-            var user = _context.Users.Find(userId);
+            var user = _context.Users.Find(id);
             var playlist = _context.Playlists.Find(user.PlaylistID);
             user.GenreID = 0;
             user.PlaylistID = 0;
