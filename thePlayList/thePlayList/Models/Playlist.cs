@@ -10,7 +10,7 @@ namespace thePlayList.Models
         public int? Id { get; set; }
         public string Name { get; set; }
         public int GenreID { get; set; }
-        public int YouserEyeDee { get; set; }
+        public int UserID { get; set; }
         public List<Song> Songs { get; set; }
     }
 }

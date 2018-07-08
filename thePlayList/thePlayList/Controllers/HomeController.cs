@@ -30,7 +30,7 @@ namespace thePlayList.Controllers
                 return View(user);
             }
 
-            return View();
+            return RedirectToAction("Index");
         }
 
         public IActionResult AboutOut()

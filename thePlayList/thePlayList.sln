@@ -5,7 +5,13 @@ VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "thePlayList", "thePlayList\thePlayList.csproj", "{F685023F-5AB8-4E82-924B-9648EFC15A1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTestThePlaylist", "XUnitTestThePlaylist\XUnitTestThePlaylist.csproj", "{E56104F1-4C94-4DE2-BE48-79C3EEF0FB50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTestThePlaylist", "XUnitTestThePlaylist\XUnitTestThePlaylist.csproj", "{E56104F1-4C94-4DE2-BE48-79C3EEF0FB50}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FFC8483D-75E7-4C5C-88E4-DC70E5D72F6B}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+		..\Requirements.md = ..\Requirements.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
